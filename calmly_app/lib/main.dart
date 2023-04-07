@@ -1,8 +1,9 @@
+import 'package:calmly_app/components.dart/navBarWidget.dart';
+import 'package:calmly_app/components.dart/optionWidget.dart';
+import 'package:calmly_app/components.dart/searchBarWidget.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/meditationScreen.dart';
-import 'package:calmly_app/widgets/navBarWidget.dart';
-import 'package:calmly_app/widgets/optionWidget.dart';
-import 'package:calmly_app/widgets/searchBarWidget.dart';
+import 'package:calmly_app/screens/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => welcomeScreen(),
       },
     );
   }

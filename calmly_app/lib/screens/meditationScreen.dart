@@ -1,6 +1,6 @@
+import 'package:calmly_app/components.dart/navBarWidget.dart';
+import 'package:calmly_app/components.dart/searchBarWidget.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:calmly_app/widgets/navBarWidget.dart';
-import 'package:calmly_app/widgets/searchBarWidget.dart';
 import 'package:flutter/material.dart';
 
 class meditationScreen extends StatelessWidget{
