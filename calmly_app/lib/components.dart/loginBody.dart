@@ -1,23 +1,29 @@
-import 'package:calmly_app/components.dart/background.dart';
+import 'package:calmly_app/components.dart/accountCheck.dart';
+import 'package:calmly_app/components.dart/inputField.dart';
+import 'package:calmly_app/components.dart/loginBackground.dart';
+import 'package:calmly_app/components.dart/passwordField.dart';
+import 'package:calmly_app/components.dart/textField.dart';
 import 'package:calmly_app/components.dart/button.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:calmly_app/screens/loginScreen.dart';
 import 'package:calmly_app/screens/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+class loginBody extends StatelessWidget {
+  const loginBody({
+    super.key,
+  });
 
 
-class Body extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return mainBackground(
+    return loginBackground(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "welcome",
+              "log in",
               style: Theme.of(context)
                 .textTheme
                 .displaySmall!
@@ -31,44 +37,45 @@ class Body extends StatelessWidget{
                       blurRadius: 2,
                     ),
                   ],
-                ),
+              ),
             ),
             SizedBox(
               height: size.height * 0.02,
             ),
             SvgPicture.asset(
-              "assets/icons/chat.svg",
-              height: size.height * 0.4,
+              "assets/icons/login.svg",
+              height: size.height * 0.33,
             ),
             SizedBox(
               height: size.height * 0.02,
             ),
-            mainButton(
-              buttonTitle: "LOGIN",
-              press: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context){
-                    return loginScreen();
-                    },
-                  ),
-                );
-              },
+            textField(
+              child: inputField(
+                hintText: "email",
+                icon: Icons.person,
+                onChanged: (value) {},
+              ),
+            ),
+            passwordField(
+              onChanged: (value){},
             ),
             mainButton(
-              buttonTitle: "SIGN UP",
-              buttonColor: kPrimaryLightColor,
-              titleColor: Colors.black,
+              buttonTitle: "LOG IN",
+              press: () {},
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            accountCheck(
               press: () {
                 Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context){
-                    return signupScreen();
-                    },
-                  ),
-                );
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context){
+                      return signupScreen();
+                      },
+                    ),
+                  );
               },
             ),
           ],
