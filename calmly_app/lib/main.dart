@@ -4,6 +4,7 @@ import 'package:calmly_app/components.dart/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
 import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';
+import 'package:calmly_app/screens/openingScreen/openingScreen.dart';
 import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => openingScreen(),
       },
     );
   }
@@ -72,7 +73,7 @@ class HomePage extends StatelessWidget{
                       ),
                     ),
                     Text(
-                      "stay calm",
+                      "stay calm.",
                       style: Theme.of(context)
                       .textTheme
                       .displayMedium!
