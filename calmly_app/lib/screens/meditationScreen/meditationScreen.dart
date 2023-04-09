@@ -1,6 +1,7 @@
-import 'package:calmly_app/components.dart/navBarWidget.dart';
-import 'package:calmly_app/components.dart/searchBarWidget.dart';
+import 'package:calmly_app/components.dart/navBar.dart';
+import 'package:calmly_app/components.dart/searchBar.dart';
 import 'package:calmly_app/constants.dart';
+import 'package:calmly_app/screens/meditationScreen/components/meditationSession.dart';
 import 'package:flutter/material.dart';
 
 class meditationScreen extends StatelessWidget{
@@ -8,7 +9,7 @@ class meditationScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: navBarWidget(),
+      bottomNavigationBar: navBar(),
       body: Stack(
         children: <Widget>[
           Container(
@@ -56,7 +57,7 @@ class meditationScreen extends StatelessWidget{
                     SizedBox(
                       width: size.width * 0.6,
                       child: Text(
-                        "live happier and healthier by learning the fundamentals of meditation and mindfulness through practice. take a deep breath, god knows you need it.",
+                        "live happier and healthier by learning the fundamentals of meditation and mindfulness through practice.",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF696969),
@@ -65,35 +66,50 @@ class meditationScreen extends StatelessWidget{
                     ),
                     SizedBox(
                       width: size.width * 0.6,
-                      child: searchBarWidget(),
+                      child: Text(
+                        "take a deep breath, god knows you need it.",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF696969),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.6,
+                      child: searchBar(),
                     ),
                     Wrap(
                       runSpacing: 15,
                       children: <Widget>[
-                        sessionWidget(
+                        meditationSession(
                           sessionNum: 0,
                           sessionTitle: "introduction",
                           isCompleted: true,
                           press: (){},
                         ),
-                        sessionWidget(
+                        meditationSession(
                           sessionNum: 1,
-                          sessionTitle: "stress",
+                          sessionTitle: "mindfulness",
                           isCompleted: true,
                           press: (){},
                         ),
-                        sessionWidget(
+                        meditationSession(
                           sessionNum: 2,
+                          sessionTitle: "stress",
+                          press: (){},
+                        ),
+                        meditationSession(
+                          sessionNum: 3,
                           sessionTitle: "anxiety",
                           press: (){},
                         ),
-                        sessionWidget(
-                          sessionNum: 3,
+                        meditationSession(
+                          sessionNum: 4,
                           sessionTitle: "rejection",
                           press: (){},
                         ),
-                        sessionWidget(
-                          sessionNum: 4,
+                        meditationSession(
+                          sessionNum: 5,
                           sessionTitle: "heartbreak",
                           press: (){},
                         ),
@@ -110,75 +126,3 @@ class meditationScreen extends StatelessWidget{
   }
 }
 
-class sessionWidget extends StatelessWidget {
-  final int sessionNum;
-  final String sessionTitle;
-  final isCompleted;
-  final VoidCallback press;
-  const sessionWidget({
-    super.key, 
-    required this.sessionNum, 
-    required this.sessionTitle,
-    this.isCompleted = false, 
-    required this.press,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(13),
-      child: Container(
-        //padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(13),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 15),
-              blurRadius: 23,
-              spreadRadius: -20,
-            )
-          ]
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: press,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 42,
-                    width: 43,
-                    decoration: BoxDecoration(
-                      color: isCompleted ? Colors.white : kBlueColor,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: kBlueColor),
-                    ),
-                    child: Icon(
-                      Icons.play_arrow, 
-                      color: isCompleted ? kBlueColor : Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "session  $sessionNum - $sessionTitle",
-                    style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(
-                    fontSize: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

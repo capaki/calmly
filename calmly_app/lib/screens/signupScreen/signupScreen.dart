@@ -1,5 +1,5 @@
-import 'package:calmly_app/components.dart/signupBackground.dart';
-import 'package:calmly_app/components.dart/signupBody.dart';
+import 'package:calmly_app/screens/signupScreen/components/signupBackground.dart';
+import 'package:calmly_app/screens/signupScreen/components/signupBody.dart';
 import 'package:flutter/material.dart';
 
 class signupScreen extends StatelessWidget{

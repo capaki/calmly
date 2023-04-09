@@ -2,11 +2,11 @@ import 'package:calmly_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class optionWidget extends StatelessWidget {
+class option extends StatelessWidget {
   final String svgSource;
   final String optionTitle;
   final VoidCallback press;
-  const optionWidget({
+  const option({
     Key? key,
     required this.svgSource,
     required this.optionTitle, 

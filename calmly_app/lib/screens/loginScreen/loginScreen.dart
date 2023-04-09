@@ -1,5 +1,5 @@
-import 'package:calmly_app/components.dart/body.dart';
-import 'package:calmly_app/components.dart/loginBody.dart';
+import 'package:calmly_app/screens/loginScreen/components/loginBody.dart';
+import 'package:calmly_app/screens/loginScreen/components/loginBody.dart';
 import 'package:flutter/material.dart';
 
 class loginScreen extends StatelessWidget{

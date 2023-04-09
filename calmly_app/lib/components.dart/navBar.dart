@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class navBarWidget extends StatelessWidget {
-  const navBarWidget({
+class navBar extends StatelessWidget {
+  const navBar({
     super.key,
   });
 
@@ -63,14 +63,14 @@ class navBarItem extends StatelessWidget {
         children: <Widget>[
           ColorFiltered(
             colorFilter: ColorFilter.mode(
-              isActive ? kActiveIconColor : kTextColor,
+              isActive ? kPrimaryColor : kTextColor,
               BlendMode.srcIn,
             ),
             child: SvgPicture.asset(svgSource),
           ),
           Text(
             navTitle,
-            style: TextStyle(color: isActive ? kActiveIconColor : kTextColor),
+            style: TextStyle(color: isActive ? kPrimaryColor : kTextColor),
           ),
         ],
       ),

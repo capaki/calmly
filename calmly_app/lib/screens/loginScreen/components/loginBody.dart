@@ -1,28 +1,29 @@
 import 'package:calmly_app/components.dart/accountCheck.dart';
-import 'package:calmly_app/components.dart/button.dart';
 import 'package:calmly_app/components.dart/inputField.dart';
-import 'package:calmly_app/components.dart/orDivider.dart';
+import 'package:calmly_app/screens/loginScreen/components/loginBackground.dart';
 import 'package:calmly_app/components.dart/passwordField.dart';
-import 'package:calmly_app/components.dart/signupBackground.dart';
-import 'package:calmly_app/components.dart/socialMedia.dart';
 import 'package:calmly_app/components.dart/textField.dart';
+import 'package:calmly_app/components.dart/button.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:calmly_app/screens/loginScreen.dart';
+import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+class loginBody extends StatelessWidget {
+  const loginBody({
+    super.key,
+  });
 
 
-class signupBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return signupBackground(
+    return loginBackground(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "sign up",
+              "log in",
               style: Theme.of(context)
                 .textTheme
                 .displaySmall!
@@ -42,8 +43,8 @@ class signupBody extends StatelessWidget {
               height: size.height * 0.02,
             ),
             SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.3,
+              "assets/icons/login.svg",
+              height: size.height * 0.33,
             ),
             SizedBox(
               height: size.height * 0.02,
@@ -59,42 +60,23 @@ class signupBody extends StatelessWidget {
               onChanged: (value){},
             ),
             mainButton(
-              buttonTitle: "SIGN UP",
+              buttonTitle: "LOG IN",
               press: () {},
             ),
             SizedBox(
               height: size.height * 0.01,
             ),
             accountCheck(
-              login: false,
               press: () {
                 Navigator.push(
                     context, 
                     MaterialPageRoute(
                       builder: (context){
-                      return loginScreen();
+                      return signupScreen();
                       },
                     ),
                   );
               },
-            ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                socialMedia(
-                  iconPath: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                socialMedia(
-                  iconPath: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-                socialMedia(
-                  iconPath: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-              ],
             ),
           ],
         ),

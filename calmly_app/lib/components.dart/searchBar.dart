@@ -2,8 +2,8 @@ import 'package:calmly_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class searchBarWidget extends StatelessWidget {
-  const searchBarWidget({
+class searchBar extends StatelessWidget {
+  const searchBar({
     super.key,
   });
 

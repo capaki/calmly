@@ -1,9 +1,10 @@
-import 'package:calmly_app/components.dart/navBarWidget.dart';
-import 'package:calmly_app/components.dart/optionWidget.dart';
-import 'package:calmly_app/components.dart/searchBarWidget.dart';
+import 'package:calmly_app/components.dart/navBar.dart';
+import 'package:calmly_app/components.dart/option.dart';
+import 'package:calmly_app/components.dart/searchBar.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:calmly_app/screens/meditationScreen.dart';
-import 'package:calmly_app/screens/welcomeScreen.dart';
+import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
+import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';
+import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => welcomeScreen(),
+        '/': (context) => HomePage(),
       },
     );
   }
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget{
   Widget build(BuildContext context){
     var size = MediaQuery.of(context).size; //total height and width of the device
     return Scaffold(
-      bottomNavigationBar: navBarWidget(),
+      bottomNavigationBar: navBar(),
       body: Stack(
         children: <Widget>[
           Container(
@@ -80,7 +81,7 @@ class HomePage extends StatelessWidget{
                         color: Colors.white,
                       ),
                     ),
-                    searchBarWidget(),
+                    searchBar(),
                     Expanded(
                       child: GridView.count(
                         crossAxisCount: 2,
@@ -88,7 +89,7 @@ class HomePage extends StatelessWidget{
                         crossAxisSpacing: 20,
                         mainAxisSpacing: 20,
                         children: <Widget>[
-                          optionWidget(
+                          option(
                             optionTitle: "meditate",
                             svgSource: "assets/icons/Meditation.svg",
                             press: (){
@@ -100,20 +101,27 @@ class HomePage extends StatelessWidget{
                               );
                             },
                           ),
-                          optionWidget(
+                          option(
                             optionTitle: "journal",
                             svgSource: "assets/icons/Hamburger.svg",
                             press: (){}
                           ),
-                          optionWidget(
+                          option(
                             optionTitle: "journal",
                             svgSource: "assets/icons/Hamburger.svg",
                             press: (){}
                           ),
-                          optionWidget(
-                            optionTitle: "educate",
+                          option(
+                            optionTitle: "get informed",
                             svgSource: "assets/icons/Meditation.svg",
-                            press: (){}
+                            press: (){
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context){
+                                  return infoScreen();
+                                }),
+                              );
+                            }
                           ),
                         ],
                       ),
