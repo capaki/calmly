@@ -11,5 +11,5 @@ const kPrimaryLightColor = Color(0xFFF1E6FF);
 const kBlackColor = Color(0xFF393939);
 const kLightBlackColor = Color(0xFF8F8F8F);
 const kInfoColor = Color(0xFFFFDAB9);
-const kProgressIndicator = Color(0xFFBE7066);
+const kArticle = Color(0xFFBE7066);
 const double defaultPadding = 16.0;

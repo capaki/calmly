@@ -39,7 +39,7 @@ class infoArticle extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 26),
               child: Row(
                 children: <Widget>[
-                  Container(
+                  /*Container(
                     height: 42,
                     width: 43,
                     decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class infoArticle extends StatelessWidget {
                       Icons.book, 
                       color: isCompleted ? kActiveIconColor : Colors.white,
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     width: 15,
                   ),
@@ -65,6 +65,8 @@ class infoArticle extends StatelessWidget {
                           .textTheme.titleMedium!
                           .copyWith(
                             fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: kArticle,
                           ),
                         ),
                         SizedBox(
@@ -77,10 +79,18 @@ class infoArticle extends StatelessWidget {
                               .titleSmall!
                               .copyWith(
                                 fontSize: 15,
-                                color: kLightBlackColor,
+                                color: Color(0xFF8F8F8F),
                               ),
                         ),
                       ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: (){},
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      color: Color(0xFFB2B2B2)
                     ),
                   ),
                 ],

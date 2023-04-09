@@ -110,6 +110,9 @@ class infoScreen extends StatelessWidget{
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),

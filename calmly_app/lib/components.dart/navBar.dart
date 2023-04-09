@@ -1,4 +1,5 @@
 import 'package:calmly_app/constants.dart';
+import 'package:calmly_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -26,7 +27,12 @@ class navBar extends StatelessWidget {
             navTitle: "home page",
             svgSource: "assets/icons/gym.svg",
             press: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context){
+                  return HomePage();
+                }),
+              );
             },
             isActive: true,
           ),

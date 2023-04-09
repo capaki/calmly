@@ -62,6 +62,7 @@ class meditationSession extends StatelessWidget {
                     .titleMedium!
                     .copyWith(
                     fontSize: 20,
+                    color: kBlackColor,
                     ),
                   ),
                 ],

@@ -115,6 +115,9 @@ class meditationScreen extends StatelessWidget{
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
