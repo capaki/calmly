@@ -1,5 +1,6 @@
 import 'package:calmly_app/components.dart/accountCheck.dart';
 import 'package:calmly_app/components.dart/inputField.dart';
+import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/loginScreen/components/loginBackground.dart';
 import 'package:calmly_app/components.dart/passwordField.dart';
 import 'package:calmly_app/components.dart/textField.dart';
@@ -61,7 +62,14 @@ class loginBody extends StatelessWidget {
             ),
             mainButton(
               buttonTitle: "LOG IN",
-              press: () {},
+              press: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context){
+                    return HomePage();
+                  }),
+                );
+              },
             ),
             SizedBox(
               height: size.height * 0.01,

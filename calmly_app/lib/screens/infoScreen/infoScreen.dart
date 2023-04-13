@@ -1,6 +1,7 @@
 import 'package:calmly_app/components.dart/navBar.dart';
 import 'package:calmly_app/components.dart/searchBar.dart';
 import 'package:calmly_app/constants.dart';
+import 'package:calmly_app/screens/infoScreen/components/articleScreen.dart';
 import 'package:calmly_app/screens/infoScreen/components/infoArticle.dart';
 import 'package:flutter/material.dart';
 
@@ -84,13 +85,18 @@ class infoScreen extends StatelessWidget{
                         infoArticle(
                           articleTitle: "introduction",
                           articleDetail: "a brief introduction into the complex parts of the human brain. learn how your brain functions under various emotions such as stress, anxity, happiness etc",
-                          isCompleted: true,
-                          press: (){},
+                          press: (){
+                           Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return articleScreen();
+                            }),
+                          );
+                        },
                         ),
                         infoArticle(
                           articleTitle: "mindfulness",
                           articleDetail: "a brief introduction into your brain",
-                          isCompleted: true,
                           press: (){},
                         ),
                         infoArticle(

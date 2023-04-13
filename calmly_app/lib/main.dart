@@ -5,6 +5,7 @@ import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
 import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';
 import 'package:calmly_app/screens/openingScreen/openingScreen.dart';
+import 'package:calmly_app/screens/trackerScreen/trackerScreen.dart';
 import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -61,15 +62,25 @@ class HomePage extends StatelessWidget{
                   children: <Widget>[
                     Align(
                       alignment: Alignment.topRight,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 70, 
-                        width: 70,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF2BEA1),
-                          shape: BoxShape.circle,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return welcomeScreen();
+                            }),
+                          );
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 70, 
+                          width: 70,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFF2BEA1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: SvgPicture.asset("assets/icons/menu.svg"),
                         ),
-                        child: SvgPicture.asset("assets/icons/menu.svg"),
                       ),
                     ),
                     Text(
@@ -104,13 +115,20 @@ class HomePage extends StatelessWidget{
                           ),
                           option(
                             optionTitle: "journal",
-                            svgSource: "assets/icons/Hamburger.svg",
+                            svgSource: "assets/icons/Meditation.svg",
                             press: (){}
                           ),
                           option(
-                            optionTitle: "journal",
-                            svgSource: "assets/icons/Hamburger.svg",
-                            press: (){}
+                            optionTitle: "daily tracker",
+                            svgSource: "assets/icons/Meditation.svg",
+                            press: (){
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context){
+                                  return trackerScreen();
+                                }),
+                              );
+                            }
                           ),
                           option(
                             optionTitle: "get informed",

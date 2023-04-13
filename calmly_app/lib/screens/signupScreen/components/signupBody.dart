@@ -1,6 +1,7 @@
 import 'package:calmly_app/components.dart/accountCheck.dart';
 import 'package:calmly_app/components.dart/button.dart';
 import 'package:calmly_app/components.dart/inputField.dart';
+import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/signupScreen/components/orDivider.dart';
 import 'package:calmly_app/components.dart/passwordField.dart';
 import 'package:calmly_app/screens/signupScreen/components/signupBackground.dart';
@@ -60,7 +61,14 @@ class signupBody extends StatelessWidget {
             ),
             mainButton(
               buttonTitle: "SIGN UP",
-              press: () {},
+              press: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context){
+                    return HomePage();
+                  }),
+                );
+              },
             ),
             SizedBox(
               height: size.height * 0.01,

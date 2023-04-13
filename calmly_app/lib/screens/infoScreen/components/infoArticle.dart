@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 class infoArticle extends StatelessWidget {
   final String articleTitle;
   final String articleDetail;
-  final isCompleted;
   final VoidCallback press;
   const infoArticle({
     super.key, 
     required this.articleTitle,
     required this.articleDetail,
-    this.isCompleted = false, 
     required this.press, 
   });
 
@@ -86,7 +84,7 @@ class infoArticle extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: (){},
+                    onPressed: press,
                     icon: Icon(
                       Icons.arrow_forward_ios,
                       size: 20,

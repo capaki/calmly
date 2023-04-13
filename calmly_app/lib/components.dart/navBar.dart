@@ -16,16 +16,16 @@ class navBar extends StatelessWidget {
       height: 70,
       color: Colors.white,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center, //spaceBetween
         children: <Widget>[
-          navBarItem(
+          /*navBarItem(
             navTitle: "today",
             svgSource: "assets/icons/calendar.svg",
             press: () {},
-          ),
+          ),*/
           navBarItem(
             navTitle: "home page",
-            svgSource: "assets/icons/gym.svg",
+            svgSource: "assets/icons/Settings.svg",
             press: () {
               Navigator.push(
                 context, 
@@ -36,11 +36,11 @@ class navBar extends StatelessWidget {
             },
             isActive: true,
           ),
-          navBarItem(
+          /*navBarItem(
             navTitle: "settings",
             svgSource: "assets/icons/Settings.svg",
             press: () {},
-          ),
+          ),*/
         ],
       ),
     );
