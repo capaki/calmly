@@ -1,4 +1,4 @@
-import 'package:calmly_app/components.dart/textField.dart';
+import 'package:calmly_app/components/textField.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:flutter/material.dart';
 

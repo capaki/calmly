@@ -1,105 +1,8 @@
-import 'package:calmly_app/components.dart/navBar.dart';
-import 'package:calmly_app/components.dart/searchBar.dart';
-import 'package:calmly_app/components.dart/button.dart';
-import 'package:calmly_app/components.dart/smallButton.dart';
+import 'package:calmly_app/components/navBar.dart';
+import 'package:calmly_app/components/searchBar.dart';
+import 'package:calmly_app/components/button.dart';
+import 'package:calmly_app/components/smallButton.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:flutter/material.dart';
-
-/*class trackerScreen extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Scaffold(
-      bottomNavigationBar: navBar(),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: size.height * .45,
-            decoration: BoxDecoration(
-              color: Color(0xFFADD8E6),
-              image: DecorationImage(
-                image: AssetImage("assets/images/meditation_bg.png"),
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
-                    Text(
-                      "daily tracker",
-                      style: Theme.of(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "get to know your mind better",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.6,
-                      child: Text(
-                        "live happier and healthier by learning the fundamentals of meditation and mindfulness through practice.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF8F8F8F),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.6,
-                      child: Text(
-                        "take a deep breath, god knows you need it.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF8F8F8F),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.6,
-                      child: searchBar(),
-                    ),
-                    Wrap(
-                      runSpacing: 15,
-                      children: <Widget>[
-
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ),
-            ), 
-          ),
-        ],
-      ),
-    );
-  }
-}
-*/
-
 import 'package:flutter/material.dart';
 
 class trackerScreen extends StatefulWidget {
@@ -189,8 +92,8 @@ class _trackerScreenState extends State<trackerScreen> {
                               borderRadius: BorderRadius.circular(13),
                               boxShadow: [
                                 BoxShadow(
-                                  offset: Offset(0, 15),
-                                  blurRadius: 23,
+                                  offset: Offset(0, 5),
+                                  blurRadius: 25,
                                   spreadRadius: -20,
                                 )
                               ],

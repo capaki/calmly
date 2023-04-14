@@ -1,6 +1,6 @@
-import 'package:calmly_app/components.dart/navBar.dart';
-import 'package:calmly_app/components.dart/option.dart';
-import 'package:calmly_app/components.dart/searchBar.dart';
+import 'package:calmly_app/components/navBar.dart';
+import 'package:calmly_app/components/option.dart';
+import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
 import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';

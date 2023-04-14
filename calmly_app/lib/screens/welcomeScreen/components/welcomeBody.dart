@@ -1,5 +1,5 @@
 import 'package:calmly_app/screens/welcomeScreen/components/welcomBackground.dart';
-import 'package:calmly_app/components.dart/button.dart';
+import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
 import 'package:calmly_app/screens/signupScreen/signupScreen.dart';

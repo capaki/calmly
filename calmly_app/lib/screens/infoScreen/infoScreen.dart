@@ -1,5 +1,5 @@
-import 'package:calmly_app/components.dart/navBar.dart';
-import 'package:calmly_app/components.dart/searchBar.dart';
+import 'package:calmly_app/components/navBar.dart';
+import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/components/articleScreen.dart';
 import 'package:calmly_app/screens/infoScreen/components/infoArticle.dart';
@@ -50,6 +50,7 @@ class infoScreen extends StatelessWidget{
                       "get to know your mind better",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(

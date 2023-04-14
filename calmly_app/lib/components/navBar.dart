@@ -11,21 +11,22 @@ class navBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 45, vertical: 10),
       height: 70,
       color: Colors.white,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, //spaceBetween
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, //spaceBetween
         children: <Widget>[
-          /*navBarItem(
+          navBarItem(
             navTitle: "today",
             svgSource: "assets/icons/calendar.svg",
             press: () {},
-          ),*/
+          ),
           navBarItem(
-            navTitle: "home page",
-            svgSource: "assets/icons/Settings.svg",
+            navTitle: "home",
+            svgSource: "assets/icons/home.svg",
             press: () {
               Navigator.push(
                 context, 
@@ -36,11 +37,11 @@ class navBar extends StatelessWidget {
             },
             isActive: true,
           ),
-          /*navBarItem(
+          navBarItem(
             navTitle: "settings",
             svgSource: "assets/icons/Settings.svg",
             press: () {},
-          ),*/
+          ),
         ],
       ),
     );
@@ -60,10 +61,10 @@ class navBarItem extends StatelessWidget {
     this.isActive = false,
   });
 
-  @override
+@override
   Widget build(BuildContext context) {
     return GestureDetector(
-    onTap: press,
+      onTap: press,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -72,7 +73,11 @@ class navBarItem extends StatelessWidget {
               isActive ? kPrimaryColor : kTextColor,
               BlendMode.srcIn,
             ),
-            child: SvgPicture.asset(svgSource),
+            child: SizedBox(
+              width: 30,
+              height: 30, 
+              child: SvgPicture.asset(svgSource),
+            ),
           ),
           Text(
             navTitle,

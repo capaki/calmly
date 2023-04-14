@@ -1,5 +1,5 @@
-import 'package:calmly_app/components.dart/navBar.dart';
-import 'package:calmly_app/components.dart/searchBar.dart';
+import 'package:calmly_app/components/navBar.dart';
+import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/meditationScreen/components/meditationSession.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +49,7 @@ class meditationScreen extends StatelessWidget{
                       "take a moment to breathe",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(
