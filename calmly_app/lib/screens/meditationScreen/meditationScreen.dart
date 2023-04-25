@@ -67,16 +67,6 @@ class meditationScreen extends StatelessWidget{
                     ),
                     SizedBox(
                       width: size.width * 0.6,
-                      child: Text(
-                        "take a deep breath, god knows you need it.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF696969),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.6,
                       child: searchBar(),
                     ),
                     Wrap(

@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class infoArticle extends StatelessWidget {
   final String articleTitle;
   final String articleDetail;
+  final String articleKey;
   final VoidCallback press;
   const infoArticle({
     super.key, 
     required this.articleTitle,
     required this.articleDetail,
+    required this.articleKey,
     required this.press, 
   });
 

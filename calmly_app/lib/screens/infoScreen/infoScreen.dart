@@ -59,17 +59,7 @@ class infoScreen extends StatelessWidget{
                     SizedBox(
                       width: size.width * 0.6,
                       child: Text(
-                        "live happier and healthier by learning the fundamentals of meditation and mindfulness through practice.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF8F8F8F),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.6,
-                      child: Text(
-                        "take a deep breath, god knows you need it.",
+                        "dive deep into the complex parts of the human brain. learn how your brain functions under various emotions such as stress, anxiety, happiness etc",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF8F8F8F),
@@ -85,12 +75,13 @@ class infoScreen extends StatelessWidget{
                       children: <Widget>[
                         infoArticle(
                           articleTitle: "introduction",
-                          articleDetail: "a brief introduction into the complex parts of the human brain. learn how your brain functions under various emotions such as stress, anxity, happiness etc",
+                          articleDetail: "a bried introduction into your brain",
+                          articleKey: "introduction",
                           press: (){
                            Navigator.push(
                             context, 
                             MaterialPageRoute(builder: (context){
-                              return articleScreen();
+                              return articleScreen(articleKey: "introduction");
                             }),
                           );
                         },
@@ -98,22 +89,54 @@ class infoScreen extends StatelessWidget{
                         infoArticle(
                           articleTitle: "mindfulness",
                           articleDetail: "a brief introduction into your brain",
-                          press: (){},
+                          articleKey: "mindfulness",
+                          press: (){
+                           Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return articleScreen(articleKey: "mindfulness");
+                            }),
+                          );
+                        },
                         ),
                         infoArticle(
                           articleTitle: "stress",
                           articleDetail: "a brief introduction into your brain",
-                          press: (){},
+                          articleKey: "stress",
+                          press: (){
+                           Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return articleScreen(articleKey: "stress");
+                            }),
+                          );
+                        },
                         ),
                         infoArticle(
                           articleTitle: "anxiety",
                           articleDetail: "a brief introduction into your brain",
-                          press: (){},
+                          articleKey: "anxiety",
+                          press: (){
+                           Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return articleScreen(articleKey: "anxiety");
+                            }),
+                          );
+                        },
                         ),
                         infoArticle(
                           articleTitle: "depression",
                           articleDetail: "a brief introduction into your brain",
-                          press: (){},
+                          articleKey: "depression",
+                          press: (){
+                           Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context){
+                              return articleScreen(articleKey: "depression");
+                            }),
+                          );
+                        },
                         ),
                       ],
                     ),
