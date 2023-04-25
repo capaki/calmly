@@ -3,8 +3,45 @@ import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/meditationScreen/components/meditationSession.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class meditationScreen extends StatelessWidget{
+class meditationScreen extends StatefulWidget {
+  @override
+  _meditationScreenState createState() => _meditationScreenState();
+}
+
+class _meditationScreenState extends State<meditationScreen> {
+  final AudioPlayer audioPlayer = AudioPlayer();
+  late final AudioCache audioCache;
+
+  _meditationScreenState() {
+    audioCache = AudioCache(prefix: 'assets/audio/', fixedPlayer: audioPlayer);
+  }
+
+  String? _currentPlayingFile;
+  int? _currentPlayingSession;
+
+  void playAudio(String fileName) async {
+    if (_currentPlayingFile == fileName) {
+      await audioPlayer.stop();
+      _currentPlayingFile = null;
+    } else {
+      await audioPlayer.stop(); // Stop any currently playing audio
+      await audioCache.play(fileName);
+      _currentPlayingFile = fileName;
+    }
+  }
+
+  void sessionClicked(int sessionNum) {
+    setState(() {
+      if (_currentPlayingSession == sessionNum) {
+        _currentPlayingSession = null;
+      } else {
+        _currentPlayingSession = sessionNum;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -35,12 +72,12 @@ class meditationScreen extends StatelessWidget{
                     Text(
                       "meditation",
                       style: Theme.of(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                          .textTheme
+                          .displayMedium!
+                          .copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                     ),
                     SizedBox(
                       height: 10,
@@ -75,34 +112,56 @@ class meditationScreen extends StatelessWidget{
                         meditationSession(
                           sessionNum: 0,
                           sessionTitle: "introduction",
-                          isCompleted: true,
-                          press: (){},
+                          press: () {
+                            playAudio('birakmagendini.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 0,
                         ),
                         meditationSession(
                           sessionNum: 1,
                           sessionTitle: "mindfulness",
-                          isCompleted: true,
-                          press: (){},
+                          press: () {
+                            playAudio('digeryarim.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 1,
                         ),
                         meditationSession(
                           sessionNum: 2,
                           sessionTitle: "stress",
-                          press: (){},
+                          press: () {
+                            playAudio('stress.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 2,
                         ),
                         meditationSession(
                           sessionNum: 3,
                           sessionTitle: "anxiety",
-                          press: (){},
+                          press: () {
+                            playAudio('anxiety.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 3,
                         ),
                         meditationSession(
                           sessionNum: 4,
                           sessionTitle: "rejection",
-                          press: (){},
+                          press: () {
+                            playAudio('rejection.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 4,
                         ),
                         meditationSession(
                           sessionNum: 5,
                           sessionTitle: "heartbreak",
-                          press: (){},
+                          press: () {
+                            playAudio('heartbreak.mp3');
+                          },
+                          sessionClicked: sessionClicked,
+                          isPlaying: _currentPlayingSession == 5,
                         ),
                       ],
                     ),
@@ -112,11 +171,10 @@ class meditationScreen extends StatelessWidget{
                   ],
                 ),
               ),
-            ), 
+            ),
           ),
         ],
       ),
     );
   }
 }
-

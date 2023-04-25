@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 class meditationSession extends StatelessWidget {
   final int sessionNum;
   final String sessionTitle;
-  final isCompleted;
   final VoidCallback press;
+  final ValueChanged<int> sessionClicked;
+  final bool isPlaying;
   const meditationSession({
-    super.key, 
-    required this.sessionNum, 
+    Key? key,
+    required this.sessionNum,
     required this.sessionTitle,
-    this.isCompleted = false, 
     required this.press,
-  });
+    required this.sessionClicked,
+    required this.isPlaying,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +31,15 @@ class meditationSession extends StatelessWidget {
               blurRadius: 23,
               spreadRadius: -20,
             )
-          ]
+          ],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: press,
+            onTap: () {
+              press();
+              sessionClicked(sessionNum);
+            },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -43,27 +48,27 @@ class meditationSession extends StatelessWidget {
                     height: 42,
                     width: 43,
                     decoration: BoxDecoration(
-                      color: isCompleted ? Colors.white : kBlueColor,
+                      color: isPlaying ? Colors.white : kBlueColor,
                       shape: BoxShape.circle,
                       border: Border.all(color: kBlueColor),
                     ),
                     child: Icon(
-                      Icons.play_arrow, 
-                      color: isCompleted ? kBlueColor : Colors.white,
+                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: isPlaying ? kBlueColor : Colors.white,
                     ),
                   ),
                   SizedBox(
                     width: 15,
                   ),
                   Text(
-                    "session  $sessionNum - $sessionTitle",
+                    "session $sessionNum - $sessionTitle",
                     style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(
-                    fontSize: 20,
-                    color: kBlackColor,
-                    ),
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(
+                          fontSize: 20,
+                          color: kBlackColor,
+                        ),
                   ),
                 ],
               ),
