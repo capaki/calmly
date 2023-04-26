@@ -20,7 +20,7 @@ class navBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween, //spaceBetween
         children: <Widget>[
           navBarItem(
-            navTitle: "today",
+            navTitle: "calendar",
             svgSource: "assets/icons/calendar.svg",
             press: () {},
           ),
@@ -38,8 +38,8 @@ class navBar extends StatelessWidget {
             isActive: true,
           ),
           navBarItem(
-            navTitle: "settings",
-            svgSource: "assets/icons/Settings.svg",
+            navTitle: "profile",
+            svgSource: "assets/icons/profile.svg",
             press: () {},
           ),
         ],

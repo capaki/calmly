@@ -29,6 +29,19 @@ class articleScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                Positioned(
+                  top: 60,
+                  left: 10,
+                  child: Transform.scale(
+                    scale: 1.5,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Color(0xFF696969)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Padding(

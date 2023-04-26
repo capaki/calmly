@@ -14,7 +14,6 @@ class loginBody extends StatelessWidget {
     super.key,
   });
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

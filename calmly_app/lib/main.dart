@@ -7,6 +7,7 @@ import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';
 import 'package:calmly_app/screens/openingScreen/openingScreen.dart';
 import 'package:calmly_app/screens/trackerScreen/trackerScreen.dart';
 import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
+import 'package:calmly_app/screens/journalScreen/journalScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -116,7 +117,14 @@ class HomePage extends StatelessWidget{
                           option(
                             optionTitle: "journal",
                             svgSource: "assets/icons/Meditation.svg",
-                            press: (){}
+                            press: (){
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context){
+                                  return journalScreen();
+                                }),
+                              );
+                            }
                           ),
                           option(
                             optionTitle: "daily tracker",

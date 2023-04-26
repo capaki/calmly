@@ -8,7 +8,6 @@ class loginBackground extends StatelessWidget {
     required this.child,
   });
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
