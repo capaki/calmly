@@ -27,7 +27,7 @@ class _journalScreenState extends State<journalScreen> {
           Container(
             height: size.height * .45,
             decoration: BoxDecoration(
-              color: Color(0xFFB1E6B1),
+              color: Color(0xFFADD8E6),
               image: DecorationImage(
                 image: AssetImage("assets/images/meditation_bg.png"),
                 fit: BoxFit.fitWidth,
@@ -52,7 +52,7 @@ class _journalScreenState extends State<journalScreen> {
                             color: Colors.white,
                           ),
                     ),
-                    SizedBox(height: 13),
+                    SizedBox(height: 11),
                     Text(
                       "express your thoughts",
                       style: TextStyle(

@@ -33,9 +33,9 @@ class articleScreen extends StatelessWidget {
                   top: 60,
                   left: 10,
                   child: Transform.scale(
-                    scale: 1.5,
+                    scale: 1.1,
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Color(0xFF696969)),
+                      icon: Icon(Icons.arrow_back_ios, color: Color(0xFF696969)),
                       onPressed: () {
                         Navigator.pop(context);
                       },

@@ -13,6 +13,7 @@ class meditationScreen extends StatefulWidget {
 class _meditationScreenState extends State<meditationScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   late final AudioCache audioCache;
+  String searchQuery = '';
 
   _meditationScreenState() {
     audioCache = AudioCache(prefix: 'assets/audio/', fixedPlayer: audioPlayer);
@@ -26,7 +27,7 @@ class _meditationScreenState extends State<meditationScreen> {
       await audioPlayer.stop();
       _currentPlayingFile = null;
     } else {
-      await audioPlayer.stop(); // Stop any currently playing audio
+      await audioPlayer.stop(); 
       await audioCache.play(fileName);
       _currentPlayingFile = fileName;
     }
@@ -43,8 +44,83 @@ class _meditationScreenState extends State<meditationScreen> {
   }
 
   @override
+  void dispose() {
+    audioPlayer.stop();
+    super.dispose();
+  }
+
+  void updateSearchQuery(String query) {
+    setState(() {
+      searchQuery = query.toLowerCase();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    List<Widget> sessions = [
+      meditationSession(
+        sessionNum: 0,
+        sessionTitle: "introduction",
+        press: () {
+          playAudio('birakmagendini.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 0,
+      ),
+      meditationSession(
+        sessionNum: 1,
+        sessionTitle: "mindfulness",
+        press: () {
+          playAudio('digeryarim.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 1,
+      ),
+      meditationSession(
+        sessionNum: 2,
+        sessionTitle: "stress",
+        press: () {
+          playAudio('stress.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 2,
+      ),
+      meditationSession(
+        sessionNum: 3,
+        sessionTitle: "anxiety",
+        press: () {
+          playAudio('anxiety.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 3,
+      ),
+      meditationSession(
+        sessionNum: 4,
+        sessionTitle: "rejection",
+        press: () {
+          playAudio('rejection.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 4,
+      ),
+      meditationSession(
+        sessionNum: 5,
+        sessionTitle: "heartbreak",
+        press: () {
+          playAudio('heartbreak.mp3');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == 5,
+      ),
+    ];
+    List<Widget> filteredSessions = sessions.where((session) {
+      if (session is meditationSession) {
+        return session.sessionTitle.toLowerCase().contains(searchQuery);
+      }
+      return false;
+    }).toList();
     return Scaffold(
       bottomNavigationBar: navBar(),
       body: Stack(
@@ -103,67 +179,20 @@ class _meditationScreenState extends State<meditationScreen> {
                       ),
                     ),
                     SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    SizedBox(
                       width: size.width * 0.6,
-                      child: searchBar(),
+                      child: searchBar(
+                        onChanged: updateSearchQuery,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Wrap(
                       runSpacing: 15,
-                      children: <Widget>[
-                        meditationSession(
-                          sessionNum: 0,
-                          sessionTitle: "introduction",
-                          press: () {
-                            playAudio('birakmagendini.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 0,
-                        ),
-                        meditationSession(
-                          sessionNum: 1,
-                          sessionTitle: "mindfulness",
-                          press: () {
-                            playAudio('digeryarim.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 1,
-                        ),
-                        meditationSession(
-                          sessionNum: 2,
-                          sessionTitle: "stress",
-                          press: () {
-                            playAudio('stress.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 2,
-                        ),
-                        meditationSession(
-                          sessionNum: 3,
-                          sessionTitle: "anxiety",
-                          press: () {
-                            playAudio('anxiety.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 3,
-                        ),
-                        meditationSession(
-                          sessionNum: 4,
-                          sessionTitle: "rejection",
-                          press: () {
-                            playAudio('rejection.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 4,
-                        ),
-                        meditationSession(
-                          sessionNum: 5,
-                          sessionTitle: "heartbreak",
-                          press: () {
-                            playAudio('heartbreak.mp3');
-                          },
-                          sessionClicked: sessionClicked,
-                          isPlaying: _currentPlayingSession == 5,
-                        ),
-                      ],
+                      children: filteredSessions,
                     ),
                     SizedBox(
                       height: 20,

@@ -1,5 +1,6 @@
 import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/components/option.dart';
+import 'package:calmly_app/components/quoteBox.dart';
 import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
@@ -74,7 +75,7 @@ class HomePage extends StatelessWidget{
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          height: 70, 
+                          height: 80, 
                           width: 70,
                           decoration: BoxDecoration(
                             color: Color(0xFFF2BEA1),
@@ -94,13 +95,14 @@ class HomePage extends StatelessWidget{
                         color: Colors.white,
                       ),
                     ),
-                    searchBar(),
+                    QuoteBox(),
+                    SizedBox(height: 15,),
                     Expanded(
                       child: GridView.count(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.8,
+                        childAspectRatio: 0.78,
                         crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
+                        mainAxisSpacing: 25,
                         children: <Widget>[
                           option(
                             optionTitle: "meditate",

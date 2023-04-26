@@ -21,14 +21,14 @@ class navBar extends StatelessWidget {
         children: <Widget>[
           navBarItem(
             navTitle: "calendar",
-            svgSource: "assets/icons/calendar.svg",
+            svgSource: "assets/icons/calendar-days.svg",
             press: () {},
           ),
           navBarItem(
             navTitle: "home",
             svgSource: "assets/icons/home.svg",
             press: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context, 
                 MaterialPageRoute(builder: (context){
                   return HomePage();

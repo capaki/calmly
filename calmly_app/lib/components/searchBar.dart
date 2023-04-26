@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class searchBar extends StatelessWidget {
+  final ValueChanged<String> onChanged;
   const searchBar({
     super.key,
+    required this.onChanged,
   });
 
   @override
@@ -17,6 +19,7 @@ class searchBar extends StatelessWidget {
         borderRadius: BorderRadius.circular(29.5),
       ),
       child: TextField(
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: "search",
           icon: SvgPicture.asset("assets/icons/search.svg"),
@@ -26,4 +29,3 @@ class searchBar extends StatelessWidget {
     );
   }
 }
-

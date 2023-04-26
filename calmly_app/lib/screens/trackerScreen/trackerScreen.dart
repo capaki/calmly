@@ -44,7 +44,7 @@ class _trackerScreenState extends State<trackerScreen> {
           Container(
             height: size.height * .45,
             decoration: BoxDecoration(
-              color: Color(0xFFADD8E6),
+              color: Color(0xFFB1E6B1),
               image: DecorationImage(
                 image: AssetImage("assets/images/meditation_bg.png"),
                 fit: BoxFit.fitWidth,

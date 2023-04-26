@@ -5,7 +5,96 @@ import 'package:calmly_app/screens/infoScreen/components/articleScreen.dart';
 import 'package:calmly_app/screens/infoScreen/components/infoArticle.dart';
 import 'package:flutter/material.dart';
 
-class infoScreen extends StatelessWidget{
+class infoScreen extends StatefulWidget {
+  @override
+  _infoScreenState createState() => _infoScreenState();
+}
+
+class _infoScreenState extends State<infoScreen> {
+  String searchQuery = '';
+
+  List<Widget> allArticles(BuildContext context) {
+    return [
+      infoArticle(
+        articleTitle: "introduction",
+        articleDetail: "a bried introduction into your brain",
+        articleKey: "introduction",
+        press: (){
+          Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context){
+            return articleScreen(articleKey: "introduction");
+          }),
+        );
+      },
+      ),
+      infoArticle(
+        articleTitle: "mindfulness",
+        articleDetail: "a brief introduction into your brain",
+        articleKey: "mindfulness",
+        press: (){
+          Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context){
+            return articleScreen(articleKey: "mindfulness");
+          }),
+        );
+      },
+      ),
+      infoArticle(
+        articleTitle: "stress",
+        articleDetail: "a brief introduction into your brain",
+        articleKey: "stress",
+        press: (){
+          Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context){
+            return articleScreen(articleKey: "stress");
+          }),
+        );
+      },
+      ),
+      infoArticle(
+        articleTitle: "anxiety",
+        articleDetail: "a brief introduction into your brain",
+        articleKey: "anxiety",
+        press: (){
+          Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context){
+            return articleScreen(articleKey: "anxiety");
+          }),
+        );
+      },
+      ),
+      infoArticle(
+        articleTitle: "depression",
+        articleDetail: "a brief introduction into your brain",
+        articleKey: "depression",
+        press: (){
+          Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (context){
+            return articleScreen(articleKey: "depression");
+          }),
+        );
+      },
+      ) ,
+    ];
+  }
+  List<Widget> getFilteredArticles(BuildContext context) {
+      return allArticles(context).where((article) {
+        infoArticle infoArt = article as infoArticle;
+        return infoArt.articleTitle.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
+  }
+
+  void updateSearchQuery(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -68,77 +157,16 @@ class infoScreen extends StatelessWidget{
                     ),
                     SizedBox(
                       width: size.width * 0.6,
-                      child: searchBar(),
+                      child: searchBar(
+                        onChanged: updateSearchQuery,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Wrap(
                       runSpacing: 15,
-                      children: <Widget>[
-                        infoArticle(
-                          articleTitle: "introduction",
-                          articleDetail: "a bried introduction into your brain",
-                          articleKey: "introduction",
-                          press: (){
-                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context){
-                              return articleScreen(articleKey: "introduction");
-                            }),
-                          );
-                        },
-                        ),
-                        infoArticle(
-                          articleTitle: "mindfulness",
-                          articleDetail: "a brief introduction into your brain",
-                          articleKey: "mindfulness",
-                          press: (){
-                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context){
-                              return articleScreen(articleKey: "mindfulness");
-                            }),
-                          );
-                        },
-                        ),
-                        infoArticle(
-                          articleTitle: "stress",
-                          articleDetail: "a brief introduction into your brain",
-                          articleKey: "stress",
-                          press: (){
-                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context){
-                              return articleScreen(articleKey: "stress");
-                            }),
-                          );
-                        },
-                        ),
-                        infoArticle(
-                          articleTitle: "anxiety",
-                          articleDetail: "a brief introduction into your brain",
-                          articleKey: "anxiety",
-                          press: (){
-                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context){
-                              return articleScreen(articleKey: "anxiety");
-                            }),
-                          );
-                        },
-                        ),
-                        infoArticle(
-                          articleTitle: "depression",
-                          articleDetail: "a brief introduction into your brain",
-                          articleKey: "depression",
-                          press: (){
-                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context){
-                              return articleScreen(articleKey: "depression");
-                            }),
-                          );
-                        },
-                        ),
-                      ],
+                      children: getFilteredArticles(context),
                     ),
                     SizedBox(
                       height: 20,
@@ -146,7 +174,7 @@ class infoScreen extends StatelessWidget{
                   ],
                 ),
               ),
-            ), 
+            ),
           ),
         ],
       ),
