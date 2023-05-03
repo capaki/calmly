@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 class textField extends StatelessWidget {
   final Widget child;
+  final TextEditingController? controller;
+  
   const textField({
-    super.key, 
+    Key? key,
     required this.child,
-  });
+    this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +20,11 @@ class textField extends StatelessWidget {
       width: size.width * 0.7,
       decoration: BoxDecoration(
         color: kPrimaryLightColor,
-        borderRadius: BorderRadius.circular(30)
+        borderRadius: BorderRadius.circular(30),
       ),
       child: child,
     );
   }
 }
+
 

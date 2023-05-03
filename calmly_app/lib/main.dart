@@ -9,10 +9,13 @@ import 'package:calmly_app/screens/openingScreen/openingScreen.dart';
 import 'package:calmly_app/screens/trackerScreen/trackerScreen.dart';
 import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:calmly_app/screens/journalScreen/journalScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

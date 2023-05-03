@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 
 class passwordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
+  final TextEditingController? controller;
+  
   const passwordField({
-    super.key, required this.onChanged,
-  });
+    Key? key,
+    required this.onChanged,
+    this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return textField(
       child: TextField(
+        controller: controller,
         obscureText: true,
         onChanged: onChanged,
         decoration: InputDecoration(
@@ -30,4 +35,3 @@ class passwordField extends StatelessWidget {
     );
   }
 }
-

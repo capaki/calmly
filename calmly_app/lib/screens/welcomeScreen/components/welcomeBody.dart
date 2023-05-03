@@ -1,3 +1,4 @@
+import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/welcomeScreen/components/welcomBackground.dart';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/constants.dart';
@@ -5,7 +6,7 @@ import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
 import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 class welcomeBody extends StatelessWidget{
   @override
@@ -44,7 +45,7 @@ class welcomeBody extends StatelessWidget{
               height: size.height * 0.02,
             ),
             mainButton(
-              buttonTitle: "LOGIN",
+              buttonTitle: "LOG IN",
               press: () {
                 Navigator.push(
                   context, 
@@ -66,6 +67,23 @@ class welcomeBody extends StatelessWidget{
                   MaterialPageRoute(
                     builder: (context){
                     return signupScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            mainButton(
+              buttonTitle: "LOG OUT",
+              press: () async {
+                await FirebaseAuth.instance.signOut();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('logged out successfully.')),
+                );
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context){
+                    return HomePage();
                     },
                   ),
                 );
