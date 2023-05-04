@@ -4,6 +4,7 @@ import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/meditationScreen/components/meditationSession.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class meditationScreen extends StatefulWidget {
   @override
@@ -22,14 +23,15 @@ class _meditationScreenState extends State<meditationScreen> {
   String? _currentPlayingFile;
   int? _currentPlayingSession;
 
-  void playAudio(String fileName) async {
-    if (_currentPlayingFile == fileName) {
+  void playAudio(String url) async {
+    if (_currentPlayingFile == url) {
       await audioPlayer.stop();
       _currentPlayingFile = null;
     } else {
-      await audioPlayer.stop(); 
-      await audioCache.play(fileName);
-      _currentPlayingFile = fileName;
+      await audioPlayer.stop();
+      await audioPlayer.setUrl(url);
+      await audioPlayer.play(url);
+      _currentPlayingFile = url;
     }
   }
 
@@ -55,72 +57,59 @@ class _meditationScreenState extends State<meditationScreen> {
     });
   }
 
+  Future<List<Widget>> getSessions() async {
+  List<Widget> sessions = [];
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  QuerySnapshot querySnapshot = await _firestore.collection('audios').orderBy('sessionNum').get();
+
+  for (DocumentSnapshot doc in querySnapshot.docs) {
+    final data = doc.data() as Map<String, dynamic>;
+    sessions.add(
+      meditationSession(
+        sessionNum: data['sessionNum'] ?? 0,
+        sessionTitle: data['sessionTitle'] ?? '',
+        audioURL: data['audioURL'] ?? '',
+        press: () {
+          playAudio(data['audioURL'] ?? '');
+        },
+        sessionClicked: sessionClicked,
+        isPlaying: _currentPlayingSession == data['sessionNum'],
+      ),
+    );
+  }
+  return sessions;
+}
+
+  Widget buildSessions(BuildContext context) {
+  return FutureBuilder(
+    future: getSessions(),
+    builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<Widget> sessions = snapshot.data!;
+          List<Widget> filteredSessions = sessions.where((session) {
+            if (session is meditationSession) {
+              return session.sessionTitle.toLowerCase().contains(searchQuery);
+            }
+            return false;
+          }).toList();
+          return Wrap(runSpacing: 15, children: filteredSessions);
+        }
+      } else {
+        return Container();
+      }
+    },
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    List<Widget> sessions = [
-      meditationSession(
-        sessionNum: 0,
-        sessionTitle: "introduction",
-        press: () {
-          playAudio('birakmagendini.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 0,
-      ),
-      meditationSession(
-        sessionNum: 1,
-        sessionTitle: "mindfulness",
-        press: () {
-          playAudio('digeryarim.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 1,
-      ),
-      meditationSession(
-        sessionNum: 2,
-        sessionTitle: "stress",
-        press: () {
-          playAudio('stress.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 2,
-      ),
-      meditationSession(
-        sessionNum: 3,
-        sessionTitle: "anxiety",
-        press: () {
-          playAudio('anxiety.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 3,
-      ),
-      meditationSession(
-        sessionNum: 4,
-        sessionTitle: "rejection",
-        press: () {
-          playAudio('rejection.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 4,
-      ),
-      meditationSession(
-        sessionNum: 5,
-        sessionTitle: "heartbreak",
-        press: () {
-          playAudio('heartbreak.mp3');
-        },
-        sessionClicked: sessionClicked,
-        isPlaying: _currentPlayingSession == 5,
-      ),
-    ];
-    List<Widget> filteredSessions = sessions.where((session) {
-      if (session is meditationSession) {
-        return session.sessionTitle.toLowerCase().contains(searchQuery);
-      }
-      return false;
-    }).toList();
     return Scaffold(
       bottomNavigationBar: navBar(),
       body: Stack(
@@ -190,10 +179,7 @@ class _meditationScreenState extends State<meditationScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    Wrap(
-                      runSpacing: 15,
-                      children: filteredSessions,
-                    ),
+                    buildSessions(context),
                     SizedBox(
                       height: 20,
                     ),

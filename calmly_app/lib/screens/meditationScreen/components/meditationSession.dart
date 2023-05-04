@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 class meditationSession extends StatelessWidget {
   final int sessionNum;
   final String sessionTitle;
+  final String audioURL;
   final VoidCallback press;
   final ValueChanged<int> sessionClicked;
   final bool isPlaying;
+
   const meditationSession({
     Key? key,
     required this.sessionNum,
     required this.sessionTitle,
+    required this.audioURL,
     required this.press,
     required this.sessionClicked,
     required this.isPlaying,
