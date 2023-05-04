@@ -4,6 +4,7 @@ import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/infoScreen/components/articleScreen.dart';
 import 'package:calmly_app/screens/infoScreen/components/infoArticle.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class infoScreen extends StatefulWidget {
   @override
@@ -13,80 +14,66 @@ class infoScreen extends StatefulWidget {
 class _infoScreenState extends State<infoScreen> {
   String searchQuery = '';
 
-  List<Widget> allArticles(BuildContext context) {
-    return [
+  Future<List<Widget>> allArticles(BuildContext context) async {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<Widget> articles = [];
+
+  QuerySnapshot querySnapshot = await _firestore.collection('articles').get();
+  List<DocumentSnapshot> sortedDocuments = querySnapshot.docs.toList()
+    ..sort((a, b) {
+      var aData = a.data() as Map<String, dynamic>;
+      var bData = b.data() as Map<String, dynamic>;
+      return (aData['key'] as String).compareTo(bData['key'] as String);
+    });
+
+  for (DocumentSnapshot documentSnapshot in sortedDocuments) {
+    final data = documentSnapshot.data() as Map<String, dynamic>;
+    articles.add(
       infoArticle(
-        articleTitle: "introduction",
-        articleDetail: "a bried introduction into your brain",
-        articleKey: "introduction",
-        press: (){
+        articleTitle: data.containsKey('title') ? data['title'] : '',
+        articleDetail: data.containsKey('detail') ? data['detail'] : '',
+        articleKey: documentSnapshot.id,
+        press: () {
           Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context){
-            return articleScreen(articleKey: "introduction");
-          }),
-        );
-      },
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return articleScreen(
+                  articleKey: documentSnapshot.id,
+                  articleTitle: data.containsKey('title') ? data['title'] : '',
+                  articleContent: data.containsKey('content') ? data['content'] : '',
+                );
+              },
+            ),
+          );
+        },
       ),
-      infoArticle(
-        articleTitle: "mindfulness",
-        articleDetail: "a brief introduction into your brain",
-        articleKey: "mindfulness",
-        press: (){
-          Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context){
-            return articleScreen(articleKey: "mindfulness");
-          }),
-        );
-      },
-      ),
-      infoArticle(
-        articleTitle: "stress",
-        articleDetail: "a brief introduction into your brain",
-        articleKey: "stress",
-        press: (){
-          Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context){
-            return articleScreen(articleKey: "stress");
-          }),
-        );
-      },
-      ),
-      infoArticle(
-        articleTitle: "anxiety",
-        articleDetail: "a brief introduction into your brain",
-        articleKey: "anxiety",
-        press: (){
-          Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context){
-            return articleScreen(articleKey: "anxiety");
-          }),
-        );
-      },
-      ),
-      infoArticle(
-        articleTitle: "depression",
-        articleDetail: "a brief introduction into your brain",
-        articleKey: "depression",
-        press: (){
-          Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context){
-            return articleScreen(articleKey: "depression");
-          }),
-        );
-      },
-      ) ,
-    ];
+    );
   }
-  List<Widget> getFilteredArticles(BuildContext context) {
-      return allArticles(context).where((article) {
-        infoArticle infoArt = article as infoArticle;
-        return infoArt.articleTitle.toLowerCase().contains(searchQuery.toLowerCase());
-      }).toList();
+  return articles;
+}
+
+
+
+  Widget getFilteredArticles(BuildContext context) {
+    return FutureBuilder(
+      future: allArticles(context),
+      builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Wrap(
+            runSpacing: 15,
+            children: snapshot.data!.where((article) {
+              infoArticle infoArt = article as infoArticle;
+              return infoArt.articleTitle.toLowerCase().contains(searchQuery.toLowerCase());
+            }).toList(),
+          );
+        }
+      },
+    );
   }
 
   void updateSearchQuery(String newQuery) {
@@ -94,7 +81,7 @@ class _infoScreenState extends State<infoScreen> {
       searchQuery = newQuery;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -125,12 +112,12 @@ class _infoScreenState extends State<infoScreen> {
                     Text(
                       "get informed",
                       style: Theme.of(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                          .textTheme
+                          .displayMedium!
+                          .copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                     ),
                     SizedBox(
                       height: 10,
@@ -156,6 +143,9 @@ class _infoScreenState extends State<infoScreen> {
                       ),
                     ),
                     SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
                       width: size.width * 0.6,
                       child: searchBar(
                         onChanged: updateSearchQuery,
@@ -164,10 +154,7 @@ class _infoScreenState extends State<infoScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    Wrap(
-                      runSpacing: 15,
-                      children: getFilteredArticles(context),
-                    ),
+                    getFilteredArticles(context),
                     SizedBox(
                       height: 20,
                     ),
@@ -181,4 +168,3 @@ class _infoScreenState extends State<infoScreen> {
     );
   }
 }
-

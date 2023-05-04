@@ -13,6 +13,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class signupBody extends StatefulWidget {
   @override
@@ -22,6 +24,15 @@ class signupBody extends StatefulWidget {
 class _signupBodyState extends State<signupBody> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  Future<void> addUserToFirestore(String uid, String name, String email) async {
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  return users.doc(uid).set({
+    'name': name,
+    'email': email,
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +71,14 @@ class _signupBodyState extends State<signupBody> {
             ),
             textField(
               child: inputField(
+                controller: _nameController,
+                hintText: "name",
+                icon: Icons.person,
+                onChanged: (value) {},
+              ),
+            ),
+            textField(
+              child: inputField(
                 controller: _emailController,
                 hintText: "email",
                 icon: Icons.email,
@@ -74,9 +93,14 @@ class _signupBodyState extends State<signupBody> {
               buttonTitle: "SIGN UP",
               press: () async {
                 try {
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: _emailController.text,
                     password: _passwordController.text,
+                  );
+                  await addUserToFirestore(
+                    userCredential.user!.uid,
+                    _nameController.text,
+                    _emailController.text,
                   );
                   Navigator.push(
                     context,
@@ -96,15 +120,16 @@ class _signupBodyState extends State<signupBody> {
               height: size.height * 0.01,
             ),
             accountCheck(
+              login: false,
               press: () {
                 Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context){
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context){
                       return loginScreen();
-                      },
-                    ),
-                  );
+                    },
+                  ),
+                );
               },
             ),
           ],

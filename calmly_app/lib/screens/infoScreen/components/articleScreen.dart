@@ -1,12 +1,14 @@
 import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:calmly_app/articles.dart';
 
 class articleScreen extends StatelessWidget {
   final String articleKey;
+  final String articleTitle;
+  final String articleContent;
 
-  articleScreen({required this.articleKey});
+  articleScreen({required this.articleKey, required this.articleTitle, required this.articleContent});
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class articleScreen extends StatelessWidget {
                           height: size.height * 0.05,
                         ),
                         Text(
-                          articleKey,
+                          articleTitle,
                           style: Theme.of(context).textTheme.displaySmall!.copyWith(
                                 fontWeight: FontWeight.w700,
                                 color: kArticle,
@@ -72,7 +74,7 @@ class articleScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                articles[articleKey] ?? 'Article not found',
+                                articleContent,
                                 style: TextStyle(fontSize: 17, color: Color(0xFF696969)),
                               ),
                             ],
