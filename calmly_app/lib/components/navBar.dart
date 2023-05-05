@@ -61,39 +61,41 @@ class navBarItem extends StatelessWidget {
   final String navTitle;
   final VoidCallback press;
   final bool isActive;
-  const navBarItem({
-    super.key, 
-    required this.svgSource, 
-    required this.navTitle, 
-    required this.press, 
-    this.isActive = false,
-  });
 
-@override
+  const navBarItem({
+    Key? key,
+    required this.svgSource,
+    required this.navTitle,
+    required this.press,
+    this.isActive = false,
+  }) : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: press,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              isActive ? kPrimaryColor : kTextColor,
-              BlendMode.srcIn,
-            ),
-            child: SizedBox(
-              width: 30,
-              height: 30, 
+          SizedBox(
+            width: 30,
+            height: 30,
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                isActive ? kPrimaryColor : kTextColor,
+                BlendMode.srcIn,
+              ),
               child: SvgPicture.asset(svgSource),
             ),
           ),
           Text(
             navTitle,
-            style: TextStyle(color: isActive ? kPrimaryColor : kTextColor),
+            style: TextStyle(
+              color: isActive ? kPrimaryColor : kTextColor,
+            ),
           ),
         ],
       ),
     );
   }
 }
-

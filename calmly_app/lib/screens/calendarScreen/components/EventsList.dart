@@ -45,9 +45,7 @@ class EventsList extends StatelessWidget {
     }
   }
 
-
-
- @override
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
@@ -58,16 +56,20 @@ class EventsList extends StatelessWidget {
         final moodDetails = getMoodDetails(event['mood'] ?? '');
         final moodColor = moodDetails['color'] as Color;
         final moodIcon = moodDetails['icon'] as IconData;
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          child: ListTile(
-            title: Text(event['mood'] ?? ''),
-            subtitle: Text(event['reason'] ?? ''),
-            leading: CircleAvatar(
-              backgroundColor: moodColor,
-              child: Icon(
-                moodIcon,
-                color: Colors.white,
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(30.0),
+          child: Card(
+            margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+            color: Color(0xFFF5F5F5),
+            child: ListTile(
+              title: Text(event['mood'] ?? ''),
+              subtitle: Text(event['reason'] ?? ''),
+              leading: CircleAvatar(
+                backgroundColor: moodColor,
+                child: Icon(
+                  moodIcon,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
