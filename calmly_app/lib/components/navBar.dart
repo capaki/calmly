@@ -1,5 +1,6 @@
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/main.dart';
+import 'package:calmly_app/screens/calendarScreen/calendarScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,7 +23,14 @@ class navBar extends StatelessWidget {
           navBarItem(
             navTitle: "calendar",
             svgSource: "assets/icons/calendar-days.svg",
-            press: () {},
+            press: () {
+              Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(builder: (context){
+                  return calendarScreen();
+                }),
+              );
+            },
           ),
           navBarItem(
             navTitle: "home",

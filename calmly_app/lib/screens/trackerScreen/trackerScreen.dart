@@ -3,7 +3,10 @@ import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/smallButton.dart';
 import 'package:calmly_app/constants.dart';
+import 'package:calmly_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class trackerScreen extends StatefulWidget {
   @override
@@ -33,6 +36,58 @@ class _trackerScreenState extends State<trackerScreen> {
       _moodReason = reason;
     });
   }
+
+  void _saveMoodTrackerData() async {
+    try {
+      if (FirebaseAuth.instance.currentUser == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('please login to track your mood.')),
+        );
+        return;
+      }
+
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+      DateTime today = DateTime.now();
+      DateTime startOfDay = DateTime(today.year, today.month, today.day);
+      DateTime endOfDay = DateTime(today.year, today.month, today.day + 1);
+
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('moodTracker')
+          .where('userId', isEqualTo: userId)
+          .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+          .where('timestamp', isLessThan: endOfDay)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('you have already tracked your mood for today.')),
+        );
+        return;
+      }
+
+      await FirebaseFirestore.instance.collection('moodTracker').add({
+        'mood': _selectedMood,
+        'reason': _moodReason,
+        'timestamp': DateTime.now(),
+        'userId': userId,
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('mood saved successfully.')),
+      );
+
+      print('Mood tracker data saved successfully!');
+    } catch (e) {
+      print('Error saving mood tracker data: $e');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +207,10 @@ class _trackerScreenState extends State<trackerScreen> {
                       alignment: Alignment.bottomCenter, // Position the button at the bottom right
                       child: smallButton(
                         buttonTitle: "save",
-                        press: () {},
+                        press: () {
+                          _saveMoodTrackerData();
+                          
+                        },
                       )
                     ),
                   ],
