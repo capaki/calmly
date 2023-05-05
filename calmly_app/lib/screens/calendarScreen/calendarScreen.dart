@@ -51,10 +51,13 @@ class _calendarScreenState extends State<calendarScreen> {
     }
   }
 
-  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchMoodData() async {
+  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchMoodData({
+    required VoidCallback onUserNotSignedIn,
+  }) async {
     Map<DateTime, List<Map<String, dynamic>>> moodData = {};
 
     if (FirebaseAuth.instance.currentUser == null) {
+      onUserNotSignedIn();
       return moodData;
     }
 
@@ -96,7 +99,7 @@ class _calendarScreenState extends State<calendarScreen> {
       body: Stack(
         children: [
           Container(
-            height: size.height * 0.45, // height of container is 45% of the device
+            height: size.height * 0.45, 
             decoration: BoxDecoration(
               color: Color(0xFFC0C0C0),
               image: DecorationImage(
@@ -122,7 +125,7 @@ class _calendarScreenState extends State<calendarScreen> {
                     ),
                     SizedBox(height: 5),
                     SizedBox(
-                      height: size.height * 0.70, // Adjust the height as needed
+                      height: size.height * 0.70, 
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -130,68 +133,78 @@ class _calendarScreenState extends State<calendarScreen> {
                         color: Colors.white,
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
-                          child: FutureBuilder(
-                            future: fetchMoodData(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<Map<DateTime, List<Map<String, dynamic>>>> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
-                              }
+                          child: Builder(
+                            builder: (BuildContext context) {
+                              return FutureBuilder(
+                                future: fetchMoodData(
+                                  onUserNotSignedIn: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('please login to access your data.')),
+                                    );
+                                  },
+                                ),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<Map<DateTime, List<Map<String, dynamic>>>> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return Center(child: CircularProgressIndicator());
+                                  }
 
-                              Map<DateTime, List<Map<String, dynamic>>> moodData = snapshot.data ?? {};
+                                  Map<DateTime, List<Map<String, dynamic>>> moodData = snapshot.data ?? {};
 
-                              return Column(
-                                children: [
-                                  TableCalendar(
-                                    firstDay: DateTime.utc(2023, 1, 1),
-                                    lastDay: DateTime.utc(2030, 12, 31),
-                                    focusedDay: _focusedDay,
-                                    selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                                    calendarFormat: _calendarFormat,
-                                    onFormatChanged: (format) {
-                                      setState(() {
-                                        _calendarFormat = format;
-                                      });
-                                    },
-                                    eventLoader: (day) => _getEventsForDay(day, moodData),
-                                    onPageChanged: (focusedDay) {
-                                      _focusedDay = focusedDay;
-                                    },
-                                    onDaySelected: (selectedDay, focusedDay) {
-                                      setState(() {
-                                        _selectedDay = selectedDay;
-                                        _focusedDay = focusedDay;
-                                        DateTime localSelectedDay =
-                                            DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
-                                        _selectedEvents.value = _getEventsForDay(localSelectedDay, moodData);
-                                      });
-                                    },
-                                    calendarStyle: CalendarStyle(
-                                      selectedDecoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: () {
-                                          if (_selectedDay != null &&
-                                              _getEventsForDay(_selectedDay!, moodData).isNotEmpty) {
-                                            var color = getMoodDetails(
-                                                _getEventsForDay(_selectedDay!, moodData).first['mood'] ?? '')['color'];
-                                            return color;
-                                          } else {
-                                            return kPrimaryColor;
-                                          }
-                                        }(),
+                                  return Column(
+                                    children: [
+                                      TableCalendar(
+                                        firstDay: DateTime.utc(2023, 1, 1),
+                                        lastDay: DateTime.utc(2030, 12, 31),
+                                        focusedDay: _focusedDay,
+                                        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                                        calendarFormat: _calendarFormat,
+                                        onFormatChanged: (format) {
+                                          setState(() {
+                                            _calendarFormat = format;
+                                          });
+                                        },
+                                        eventLoader: (day) => _getEventsForDay(day, moodData),
+                                        onPageChanged: (focusedDay) {
+                                          _focusedDay = focusedDay;
+                                        },
+                                        onDaySelected: (selectedDay, focusedDay) {
+                                          setState(() {
+                                            _selectedDay = selectedDay;
+                                            _focusedDay = focusedDay;
+                                            DateTime localSelectedDay =
+                                                DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+                                            _selectedEvents.value = _getEventsForDay(localSelectedDay, moodData);
+                                          });
+                                        },
+                                        calendarStyle: CalendarStyle(
+                                          selectedDecoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: () {
+                                              if (_selectedDay != null &&
+                                                  _getEventsForDay(_selectedDay!, moodData).isNotEmpty) {
+                                                var color = getMoodDetails(
+                                                    _getEventsForDay(_selectedDay!, moodData).first['mood'] ?? '')['color'];
+                                                return color;
+                                              } else {
+                                                return kPrimaryColor;
+                                              }
+                                            }(),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  ValueListenableBuilder<List<Map<String, dynamic>>>(
-                                    valueListenable: _selectedEvents,
-                                    builder: (context, value, _) {
-                                      return EventsList(events: value);
-                                    },
-                                  ),
-                                ],
+                                      SizedBox(height: 20),
+                                      ValueListenableBuilder<List<Map<String, dynamic>>>(
+                                        valueListenable: _selectedEvents,
+                                        builder: (context, value, _) {
+                                          return EventsList(events: value);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
+                            }
                           ),
                         ),
                       ),
