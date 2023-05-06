@@ -3,6 +3,7 @@ import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/calendarScreen/calendarScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:calmly_app/screens/profileScreen/profileScreen.dart';
 
 
 class navBar extends StatelessWidget {
@@ -48,7 +49,14 @@ class navBar extends StatelessWidget {
           navBarItem(
             navTitle: "profile",
             svgSource: "assets/icons/profile.svg",
-            press: () {},
+            press: () {
+              Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(builder: (context){
+                  return profileScreen();
+                }),
+              );
+            },
           ),
         ],
       ),
