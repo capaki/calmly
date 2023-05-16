@@ -25,14 +25,19 @@ class _signupBodyState extends State<signupBody> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
-  Future<void> addUserToFirestore(String uid, String name, String email) async {
+  Future<void> addUserToFirestore(String uid, String name, String email, String age) async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   return users.doc(uid).set({
     'name': name,
     'email': email,
+    'age': age,
+    'created_at': DateTime.now(),
+    'moodCount': 0,
   });
 }
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +67,19 @@ class _signupBodyState extends State<signupBody> {
             SizedBox(
               height: size.height * 0.02,
             ),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.3,
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
             textField(
               child: inputField(
                 controller: _nameController,
                 hintText: "name",
                 icon: Icons.person,
+                onChanged: (value) {},
+              ),
+            ),
+            textField(
+              child: inputField(
+                controller: _ageController,
+                hintText: "age",
+                icon: Icons.cake,
                 onChanged: (value) {},
               ),
             ),
@@ -92,6 +98,12 @@ class _signupBodyState extends State<signupBody> {
             mainButton(
               buttonTitle: "SIGN UP",
               press: () async {
+                if (int.parse(_ageController.text) < 16) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('you must be at least 16 years old to create an account.')),
+                  );
+                  return;
+                }
                 try {
                   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: _emailController.text,
@@ -101,12 +113,16 @@ class _signupBodyState extends State<signupBody> {
                     userCredential.user!.uid,
                     _nameController.text,
                     _emailController.text,
+                    _ageController.text,
                   );
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
                       return loginScreen();
                     }),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('cccount created successfully. please log in.')),
                   );
                 } on FirebaseAuthException catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(

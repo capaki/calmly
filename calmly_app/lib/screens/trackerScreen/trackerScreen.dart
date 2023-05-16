@@ -73,6 +73,19 @@ class _trackerScreenState extends State<trackerScreen> {
         'userId': userId,
       });
 
+    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(userDoc);
+
+      if (!snapshot.exists) {
+        throw Exception("User does not exist!");
+      }
+
+      int newMoodCount = snapshot.get('moodCount') + 1;
+      transaction.update(userDoc, {'moodCount': newMoodCount});
+    });
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
