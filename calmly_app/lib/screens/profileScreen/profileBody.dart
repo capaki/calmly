@@ -2,6 +2,7 @@ import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/smallButton.dart';
 import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
+import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -218,8 +219,8 @@ void initState() {
                         ),
                       if (userMoodCount != null)
                         displayInfoCard("moods tracked", userMoodCount.toString()),
-                      currentUser != null
-                      ? mainButton(
+                      if (currentUser != null) 
+                        mainButton(
                           buttonTitle: "LOG OUT",
                           press: () async {
                             await FirebaseAuth.instance.signOut();
@@ -236,19 +237,38 @@ void initState() {
                             );
                           },
                         )
-                      : mainButton(
-                          buttonTitle: "LOG IN",
+                        else 
+                         Column(
+                           children: [
+                             mainButton(
+                              buttonTitle: "LOG IN",
+                              press: () {
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(
+                                    builder: (context){
+                                    return loginScreen();
+                                    },
+                                  ),
+                                );
+                              },
+                        ),
+                        mainButton(
+                          buttonTitle: "SIGN UP",
+                          buttonColor: kPrimaryLightColor,
+                          titleColor: Colors.black,
                           press: () {
                             Navigator.push(
                               context, 
                               MaterialPageRoute(
                                 builder: (context){
-                                return loginScreen();
+                                return signupScreen();
                                 },
                               ),
                             );
                           },
-                        ),  
+                        ),
+                      ],),
                     ],
                   ),
                 ),

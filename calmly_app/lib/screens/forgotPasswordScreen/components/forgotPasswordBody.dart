@@ -67,11 +67,11 @@ class _forgotPasswordBodyState extends State<forgotPasswordBody> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.02,
+              height: size.height * 0.03,
             ),
             SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.33,
+              "assets/icons/chat.svg",
+              height: size.height * 0.38,
             ),
             SizedBox(
               height: size.height * 0.02,
