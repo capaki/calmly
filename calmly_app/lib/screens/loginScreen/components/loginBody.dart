@@ -34,19 +34,16 @@ class _loginBodyState extends State<loginBody> {
           children: <Widget>[
             Text(
               "log in",
-              style: Theme.of(context)
-                .textTheme
-                .displaySmall!
-                .copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF817DC0),
-                  shadows: [
-                    Shadow(
-                      color: Color(0xFFC0C0C0),
-                      offset: Offset(2, 2),
-                      blurRadius: 2,
-                    ),
-                  ],
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF817DC0),
+                shadows: [
+                  Shadow(
+                    color: Color(0xFFC0C0C0),
+                    offset: Offset(2, 2),
+                    blurRadius: 2,
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -92,7 +89,7 @@ class _loginBodyState extends State<loginBody> {
                     password: passwordController.text,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('logged in successfully.')),
+                    SnackBar(content: Text('Logged in successfully.')),
                   );
                   Navigator.push(
                     context,
@@ -101,7 +98,22 @@ class _loginBodyState extends State<loginBody> {
                     }),
                   );
                 } on FirebaseAuthException catch (e) {
-                  print('Error signing in: ${e.code}');
+                  String errorMessage = '';
+                  if (e.code == 'user-not-found' ||
+                      e.code == 'wrong-password') {
+                    errorMessage = 'Wrong email or password.';
+                  } else if (e.code == 'invalid-email') {
+                    errorMessage = 'Invalid email address.';
+                  } else {
+                    print('Error signing in: ${e.code}');
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        errorMessage,
+                      ),
+                    ),
+                  );
                 }
               },
             ),
@@ -111,13 +123,13 @@ class _loginBodyState extends State<loginBody> {
             accountCheck(
               press: () {
                 Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context){
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
                       return signupScreen();
-                      },
-                    ),
-                  );
+                    },
+                  ),
+                );
               },
             ),
           ],
@@ -126,4 +138,3 @@ class _loginBodyState extends State<loginBody> {
     );
   }
 }
-

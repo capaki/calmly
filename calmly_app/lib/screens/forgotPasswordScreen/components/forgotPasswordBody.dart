@@ -34,36 +34,30 @@ class _forgotPasswordBodyState extends State<forgotPasswordBody> {
           children: <Widget>[
             Text(
               "reset",
-              style: Theme.of(context)
-                .textTheme
-                .displaySmall!
-                .copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF817DC0),
-                  shadows: [
-                    Shadow(
-                      color: Color(0xFFC0C0C0),
-                      offset: Offset(2, 2),
-                      blurRadius: 2,
-                    ),
-                  ],
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF817DC0),
+                shadows: [
+                  Shadow(
+                    color: Color(0xFFC0C0C0),
+                    offset: Offset(2, 2),
+                    blurRadius: 2,
+                  ),
+                ],
               ),
             ),
             Text(
               "password",
-              style: Theme.of(context)
-                .textTheme
-                .displaySmall!
-                .copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF817DC0),
-                  shadows: [
-                    Shadow(
-                      color: Color(0xFFC0C0C0),
-                      offset: Offset(2, 2),
-                      blurRadius: 2,
-                    ),
-                  ],
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF817DC0),
+                shadows: [
+                  Shadow(
+                    color: Color(0xFFC0C0C0),
+                    offset: Offset(2, 2),
+                    blurRadius: 2,
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -92,7 +86,11 @@ class _forgotPasswordBodyState extends State<forgotPasswordBody> {
                     email: emailController.text,
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('password reset email sent. please check your email.')),
+                    SnackBar(
+                      content: Text(
+                        'Password reset email sent. Please check your email.',
+                      ),
+                    ),
                   );
                   Navigator.push(
                     context,
@@ -101,7 +99,21 @@ class _forgotPasswordBodyState extends State<forgotPasswordBody> {
                     }),
                   );
                 } on FirebaseAuthException catch (e) {
-                  print('error sending password reset email: ${e.code}');
+                  String errorMessage = '';
+                  if (e.code == 'user-not-found') {
+                    errorMessage = 'User does not exist.';
+                  } else if (e.code == 'invalid-email') {
+                    errorMessage = 'Invalid email address.';
+                  } else {
+                    print('Error sending password reset email: ${e.code}');
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        errorMessage,
+                      ),
+                    ),
+                  );
                 }
               },
             ),

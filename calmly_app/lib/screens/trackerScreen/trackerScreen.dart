@@ -59,9 +59,9 @@ class _trackerScreenState extends State<trackerScreen> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('you have already tracked your mood for today.')),
+          SnackBar(
+              content: Text('you have already tracked your mood for today.')),
         );
         return;
       }
@@ -73,18 +73,19 @@ class _trackerScreenState extends State<trackerScreen> {
         'userId': userId,
       });
 
-    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+      DocumentReference userDoc =
+          FirebaseFirestore.instance.collection('users').doc(userId);
 
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(userDoc);
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(userDoc);
 
-      if (!snapshot.exists) {
-        throw Exception("User does not exist!");
-      }
+        if (!snapshot.exists) {
+          throw Exception("User does not exist!");
+        }
 
-      int newMoodCount = snapshot.get('moodCount') + 1;
-      transaction.update(userDoc, {'moodCount': newMoodCount});
-    });
+        int newMoodCount = snapshot.get('moodCount') + 1;
+        transaction.update(userDoc, {'moodCount': newMoodCount});
+      });
 
       Navigator.pushReplacement(
         context,
@@ -100,8 +101,6 @@ class _trackerScreenState extends State<trackerScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -112,7 +111,7 @@ class _trackerScreenState extends State<trackerScreen> {
           Container(
             height: size.height * .45,
             decoration: BoxDecoration(
-              color: Color(0xFFB1E6B1),
+              color: Color(0xFF9CC8BC),
               image: DecorationImage(
                 image: AssetImage("assets/images/meditation_bg.png"),
                 fit: BoxFit.fitWidth,
@@ -129,13 +128,11 @@ class _trackerScreenState extends State<trackerScreen> {
                     SizedBox(height: size.height * 0.05),
                     Text(
                       "mood tracker",
-                      style: Theme.of(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                     ),
                     SizedBox(height: 8),
                     Text(
@@ -145,7 +142,7 @@ class _trackerScreenState extends State<trackerScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 25),
+                    SizedBox(height: 20),
                     Wrap(
                       spacing: 15,
                       runSpacing: 15,
@@ -168,11 +165,17 @@ class _trackerScreenState extends State<trackerScreen> {
                             ),
                             child: Row(
                               children: <Widget>[
-                                Padding( // Wrap the Icon widget with a Padding widget
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1), // Set the desired padding
+                                Padding(
+                                  // Wrap the Icon widget with a Padding widget
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 1), // Set the desired padding
                                   child: Icon(
                                     moodData['icon'],
-                                    color: isSelected ? kPrimaryColor : Colors.grey, // Set the color to kPrimaryColor when selected
+                                    color: isSelected
+                                        ? kPrimaryColor
+                                        : Colors
+                                            .grey, // Set the color to kPrimaryColor when selected
                                     size: 30,
                                   ),
                                 ),
@@ -192,7 +195,7 @@ class _trackerScreenState extends State<trackerScreen> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(height: 25),
+                    SizedBox(height: 20),
                     Text(
                       "why are you feeling this way?",
                       style: TextStyle(
@@ -208,24 +211,24 @@ class _trackerScreenState extends State<trackerScreen> {
                         maxLines: 5,
                         maxLength: 300,
                         decoration: InputDecoration(
-                          hintText: "do you want to elaborate on why you might be feeling this way?",
+                          hintText:
+                              "do you want to elaborate on why you might be feeling this way?",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
                           contentPadding: EdgeInsets.all(10.0),
                         ),
                       ),
-                    ),                    
-                    Align(
-                      alignment: Alignment.bottomCenter, // Position the button at the bottom right
-                      child: smallButton(
-                        buttonTitle: "save",
-                        press: () {
-                          _saveMoodTrackerData();
-                          
-                        },
-                      )
                     ),
+                    Align(
+                        alignment: Alignment
+                            .bottomCenter, // Position the button at the bottom right
+                        child: mainButton(
+                          buttonTitle: "SAVE  MOOD",
+                          press: () {
+                            _saveMoodTrackerData();
+                          },
+                        )),
                   ],
                 ),
               ),
@@ -236,4 +239,3 @@ class _trackerScreenState extends State<trackerScreen> {
     );
   }
 }
-

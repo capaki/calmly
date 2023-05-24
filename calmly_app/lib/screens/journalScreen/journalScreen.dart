@@ -1,5 +1,10 @@
+import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/components/smallButton.dart';
+import 'package:calmly_app/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 class journalScreen extends StatefulWidget {
@@ -15,6 +20,40 @@ class _journalScreenState extends State<journalScreen> {
     setState(() {
       _journalEntry = entry;
     });
+  }
+
+  Future<void> saveJournalEntry(String userId, String entry) async {
+    final timestamp = Timestamp.now();
+    await FirebaseFirestore.instance.collection('journal').add({
+      'userId': userId,
+      'timestamp': timestamp,
+      'entry': entry,
+    });
+  }
+
+  Future<void> _saveJournalEntry() async {
+    if (_journalEntry.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please input your journal entry.'),
+        ),
+      );
+      return;
+    }
+
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await saveJournalEntry(currentUser.uid, _journalEntry);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Journal entry saved successfully.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -44,13 +83,11 @@ class _journalScreenState extends State<journalScreen> {
                     SizedBox(height: size.height * 0.05),
                     Text(
                       "journal",
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium!
-                          .copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                     ),
                     SizedBox(height: 11),
                     Text(
@@ -85,7 +122,7 @@ class _journalScreenState extends State<journalScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                          color: Color(0xFF696969),
+                        color: Color(0xFF696969),
                       ),
                     ),
                     SizedBox(height: 25),
@@ -106,9 +143,9 @@ class _journalScreenState extends State<journalScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: smallButton(
-                        buttonTitle: "save",
-                        press: () {},
+                      child: mainButton(
+                        buttonTitle: "SAVE",
+                        press: _saveJournalEntry,
                       ),
                     ),
                   ],

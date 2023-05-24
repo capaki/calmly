@@ -15,7 +15,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class signupBody extends StatefulWidget {
   @override
   _signupBodyState createState() => _signupBodyState();
@@ -27,17 +26,17 @@ class _signupBodyState extends State<signupBody> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
 
-  Future<void> addUserToFirestore(String uid, String name, String email, String age) async {
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  return users.doc(uid).set({
-    'name': name,
-    'email': email,
-    'age': age,
-    'created_at': DateTime.now(),
-    'moodCount': 0,
-  });
-}
-
+  Future<void> addUserToFirestore(
+      String uid, String name, String email, String age) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return users.doc(uid).set({
+      'name': name,
+      'email': email,
+      'age': age,
+      'created_at': DateTime.now(),
+      'moodCount': 0,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +48,7 @@ class _signupBodyState extends State<signupBody> {
           children: <Widget>[
             Text(
               "sign up",
-              style: Theme.of(context)
-                  .textTheme
-                  .displaySmall!
-                  .copyWith(
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF817DC0),
                 shadows: [
@@ -100,12 +96,15 @@ class _signupBodyState extends State<signupBody> {
               press: () async {
                 if (int.parse(_ageController.text) < 16) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('you must be at least 16 years old to create an account.')),
+                    SnackBar(
+                        content: Text(
+                            'You must be at least 16 years old to create an account.')),
                   );
                   return;
                 }
                 try {
-                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  UserCredential userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
                     email: _emailController.text,
                     password: _passwordController.text,
                   );
@@ -122,11 +121,28 @@ class _signupBodyState extends State<signupBody> {
                     }),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('cccount created successfully. please log in.')),
+                    SnackBar(
+                        content: Text(
+                            'Account created successfully. Please log in.')),
                   );
                 } on FirebaseAuthException catch (e) {
+                  String errorMessage;
+                  switch (e.code) {
+                    case 'email-already-in-use':
+                      errorMessage = 'The email address is already in use.';
+                      break;
+                    case 'invalid-email':
+                      errorMessage = 'Invalid email address.';
+                      break;
+                    case 'weak-password':
+                      errorMessage = 'The password is too weak.';
+                      break;
+                    default:
+                      errorMessage =
+                          'An error occurred. Please try again later.';
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('error: ${e.code}')),
+                    SnackBar(content: Text(errorMessage)),
                   );
                   print('Error signing up: ${e.code}');
                 }
@@ -139,12 +155,10 @@ class _signupBodyState extends State<signupBody> {
               login: false,
               press: () {
                 Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context){
-                      return loginScreen();
-                    },
-                  ),
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return loginScreen();
+                  }),
                 );
               },
             ),
