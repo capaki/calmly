@@ -50,17 +50,15 @@ class _calendarScreenState extends State<calendarScreen> {
     }
   }
 
-  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchMoodData({
-    required VoidCallback onUserNotSignedIn,
-  }) async {
+  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchMoodData() async {
     Map<DateTime, List<Map<String, dynamic>>> moodData = {};
 
-    if (FirebaseAuth.instance.currentUser == null) {
-      onUserNotSignedIn();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
       return moodData;
     }
 
-    String userId = FirebaseAuth.instance.currentUser!.uid;
+    String userId = currentUser.uid;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('moodTracker')
         .where('userId', isEqualTo: userId)
@@ -83,17 +81,15 @@ class _calendarScreenState extends State<calendarScreen> {
     return moodData;
   }
 
-  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchJournalData({
-    required VoidCallback onUserNotSignedIn,
-  }) async {
+  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchJournalData() async {
     Map<DateTime, List<Map<String, dynamic>>> journalData = {};
 
-    if (FirebaseAuth.instance.currentUser == null) {
-      onUserNotSignedIn();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
       return journalData;
     }
 
-    String userId = FirebaseAuth.instance.currentUser!.uid;
+    String userId = currentUser.uid;
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('journal')
         .where('userId', isEqualTo: userId)
@@ -177,41 +173,38 @@ class _calendarScreenState extends State<calendarScreen> {
                           padding: const EdgeInsets.all(15.0),
                           child: Builder(
                             builder: (BuildContext context) {
+                              final scaffoldContext = context;
                               return FutureBuilder(
                                 future: Future.wait([
-                                  fetchMoodData(
-                                    onUserNotSignedIn: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Please login to access your data.')),
-                                      );
-                                    },
-                                  ),
-                                  fetchJournalData(
-                                    onUserNotSignedIn: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Please login to access your data.')),
-                                      );
-                                    },
-                                  ),
+                                  fetchMoodData(),
+                                  fetchJournalData(),
                                 ]),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<List<dynamic>> snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return Center(
-                                        child: CircularProgressIndicator());
+                                      child: CircularProgressIndicator(),
+                                    );
                                   }
 
                                   Map<DateTime, List<Map<String, dynamic>>>
                                       moodData = snapshot.data![0] ?? {};
                                   Map<DateTime, List<Map<String, dynamic>>>
                                       journalData = snapshot.data![1] ?? {};
+
+                                  if (moodData.isEmpty && journalData.isEmpty) {
+                                    WidgetsBinding.instance
+                                        ?.addPostFrameCallback((_) {
+                                      ScaffoldMessenger.of(scaffoldContext)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Please log in to access your data.'),
+                                        ),
+                                      );
+                                    });
+                                  }
 
                                   return SingleChildScrollView(
                                     child: Column(
@@ -232,7 +225,9 @@ class _calendarScreenState extends State<calendarScreen> {
                                               _getEventsForDay(
                                                   day, moodData, journalData),
                                           onPageChanged: (focusedDay) {
-                                            _focusedDay = focusedDay;
+                                            setState(() {
+                                              _focusedDay = focusedDay;
+                                            });
                                           },
                                           onDaySelected:
                                               (selectedDay, focusedDay) {
@@ -241,9 +236,10 @@ class _calendarScreenState extends State<calendarScreen> {
                                               _focusedDay = focusedDay;
                                               DateTime localSelectedDay =
                                                   DateTime(
-                                                      selectedDay.year,
-                                                      selectedDay.month,
-                                                      selectedDay.day);
+                                                selectedDay.year,
+                                                selectedDay.month,
+                                                selectedDay.day,
+                                              );
                                               _selectedEvents.value =
                                                   _getEventsForDay(
                                                       localSelectedDay,
