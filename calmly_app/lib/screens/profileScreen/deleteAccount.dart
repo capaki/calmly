@@ -15,12 +15,24 @@ class journalScreen extends StatefulWidget {
 
 class _journalScreenState extends State<journalScreen> {
   String _journalEntry = '';
-  String _prompt = '';
+  List<String> prompts = [
+    "what are you grateful for today?",
+    "describe a small act of kindness you received.",
+    "what is something that made you smile today?",
+    // Add more prompts as needed
+  ];
+  late String _prompt;
 
   void _onJournalEntrySubmitted(String entry) {
     setState(() {
       _journalEntry = entry;
     });
+  }
+
+  String _selectRandomPrompt() {
+    final random = Random();
+    final index = random.nextInt(prompts.length);
+    return prompts[index];
   }
 
   Future<void> saveJournalEntry(String userId, String entry) async {
@@ -53,6 +65,9 @@ class _journalScreenState extends State<journalScreen> {
 
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      setState(() {
+        _prompt = _selectRandomPrompt();
+      });
       await saveJournalEntry(currentUser.uid, _journalEntry);
       Navigator.pushReplacement(
         context,
@@ -66,24 +81,10 @@ class _journalScreenState extends State<journalScreen> {
     }
   }
 
-  Future<void> fetchRandomPrompt() async {
-    final promptRef = FirebaseFirestore.instance.collection('prompts');
-    final snapshot = await promptRef.get();
-    final List<String> prompts =
-        snapshot.docs.map((doc) => doc['prompt'] as String).toList();
-    if (prompts.isNotEmpty) {
-      final random = Random();
-      final index = random.nextInt(prompts.length);
-      setState(() {
-        _prompt = prompts[index];
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    fetchRandomPrompt();
+    _prompt = _selectRandomPrompt();
   }
 
   @override

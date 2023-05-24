@@ -1,5 +1,6 @@
 import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/constants.dart';
+import 'package:calmly_app/screens/calendarScreen/components/EventsList.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _calendarScreenState extends State<calendarScreen> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay, {}));
+    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay, {}, {}));
     _selectedDayColor = ValueNotifier(kPrimaryColor);
   }
 
@@ -35,36 +36,51 @@ class _calendarScreenState extends State<calendarScreen> {
   Map<String, dynamic> getMoodDetails(String mood) {
     switch (mood) {
       case 'awesome':
-        return {
-          'color': Colors.green[800] ?? Colors.green,
-          'icon': Icons.wb_sunny,
-        };
+        return {'color': Colors.green[800] ?? Colors.green};
       case 'good':
-        return {
-          'color': Colors.green,
-          'icon': Icons.mood,
-        };
+        return {'color': Colors.green};
       case 'okay':
-        return {
-          'color': Colors.yellow,
-          'icon': Icons.account_circle,
-        };
+        return {'color': Colors.yellow};
       case 'bad':
-        return {
-          'color': Colors.orange,
-          'icon': Icons.mood_bad,
-        };
+        return {'color': Colors.orange};
       case 'terrible':
-        return {
-          'color': Colors.red,
-          'icon': Icons.wb_cloudy,
-        };
+        return {'color': Colors.red};
       default:
-        return {
-          'color': Colors.grey,
-          'icon': Icons.help,
-        };
+        return {'color': Colors.grey};
     }
+  }
+
+  Future<Map<DateTime, List<Map<String, dynamic>>>> fetchMoodData({
+    required VoidCallback onUserNotSignedIn,
+  }) async {
+    Map<DateTime, List<Map<String, dynamic>>> moodData = {};
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      onUserNotSignedIn();
+      return moodData;
+    }
+
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('moodTracker')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      final data = doc.data() as Map<String, dynamic>;
+      DateTime date = (data['timestamp'] as Timestamp).toDate();
+      DateTime key = DateTime(date.year, date.month, date.day);
+      String mood = data['mood'] ?? '';
+      String reason = data['reason'] ?? '';
+
+      if (!moodData.containsKey(key)) {
+        moodData[key] = [];
+      }
+
+      (moodData[key] ??= []).add({'mood': mood, 'reason': reason});
+    }
+
+    return moodData;
   }
 
   Future<Map<DateTime, List<Map<String, dynamic>>>> fetchJournalData({
@@ -100,8 +116,18 @@ class _calendarScreenState extends State<calendarScreen> {
   }
 
   List<Map<String, dynamic>> _getEventsForDay(
-      DateTime day, Map<DateTime, List<Map<String, dynamic>>> journalData) {
-    List<Map<String, dynamic>> events = journalData[day] ?? [];
+      DateTime day,
+      Map<DateTime, List<Map<String, dynamic>>> moodData,
+      Map<DateTime, List<Map<String, dynamic>>> journalData) {
+    List<Map<String, dynamic>> events = [];
+
+    if (moodData.containsKey(day)) {
+      events.addAll(moodData[day] ?? []);
+    }
+
+    if (journalData.containsKey(day)) {
+      events.addAll(journalData[day] ?? []);
+    }
 
     return events;
   }
@@ -152,20 +178,30 @@ class _calendarScreenState extends State<calendarScreen> {
                           child: Builder(
                             builder: (BuildContext context) {
                               return FutureBuilder(
-                                future: fetchJournalData(
-                                  onUserNotSignedIn: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Please log in to access your data.')),
-                                    );
-                                  },
-                                ),
+                                future: Future.wait([
+                                  fetchMoodData(
+                                    onUserNotSignedIn: () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please login to access your data.')),
+                                      );
+                                    },
+                                  ),
+                                  fetchJournalData(
+                                    onUserNotSignedIn: () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please login to access your data.')),
+                                      );
+                                    },
+                                  ),
+                                ]),
                                 builder: (BuildContext context,
-                                    AsyncSnapshot<
-                                            Map<DateTime,
-                                                List<Map<String, dynamic>>>>
-                                        snapshot) {
+                                    AsyncSnapshot<List<dynamic>> snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
                                     return Center(
@@ -173,92 +209,83 @@ class _calendarScreenState extends State<calendarScreen> {
                                   }
 
                                   Map<DateTime, List<Map<String, dynamic>>>
-                                      journalData = snapshot.data ?? {};
+                                      moodData = snapshot.data![0] ?? {};
+                                  Map<DateTime, List<Map<String, dynamic>>>
+                                      journalData = snapshot.data![1] ?? {};
 
-                                  return Column(
-                                    children: [
-                                      TableCalendar(
-                                        firstDay: DateTime.utc(2023, 1, 1),
-                                        lastDay: DateTime.utc(2030, 12, 31),
-                                        focusedDay: _focusedDay,
-                                        selectedDayPredicate: (day) =>
-                                            isSameDay(_selectedDay, day),
-                                        calendarFormat: _calendarFormat,
-                                        onFormatChanged: (format) {
-                                          setState(() {
-                                            _calendarFormat = format;
-                                          });
-                                        },
-                                        eventLoader: (day) =>
-                                            _getEventsForDay(day, journalData),
-                                        onPageChanged: (focusedDay) {
-                                          _focusedDay = focusedDay;
-                                        },
-                                        onDaySelected:
-                                            (selectedDay, focusedDay) {
-                                          setState(() {
-                                            _selectedDay = selectedDay;
+                                  return SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        TableCalendar(
+                                          firstDay: DateTime.utc(2023, 1, 1),
+                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          focusedDay: _focusedDay,
+                                          selectedDayPredicate: (day) =>
+                                              isSameDay(_selectedDay, day),
+                                          calendarFormat: _calendarFormat,
+                                          onFormatChanged: (format) {
+                                            setState(() {
+                                              _calendarFormat = format;
+                                            });
+                                          },
+                                          eventLoader: (day) =>
+                                              _getEventsForDay(
+                                                  day, moodData, journalData),
+                                          onPageChanged: (focusedDay) {
                                             _focusedDay = focusedDay;
-                                            DateTime localSelectedDay =
-                                                DateTime(
-                                                    selectedDay.year,
-                                                    selectedDay.month,
-                                                    selectedDay.day);
-                                            _selectedEvents.value =
-                                                _getEventsForDay(
-                                                    localSelectedDay,
-                                                    journalData);
-                                          });
-                                        },
-                                        calendarStyle: CalendarStyle(
-                                          selectedDecoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: () {
-                                              if (_selectedDay != null &&
+                                          },
+                                          onDaySelected:
+                                              (selectedDay, focusedDay) {
+                                            setState(() {
+                                              _selectedDay = selectedDay;
+                                              _focusedDay = focusedDay;
+                                              DateTime localSelectedDay =
+                                                  DateTime(
+                                                      selectedDay.year,
+                                                      selectedDay.month,
+                                                      selectedDay.day);
+                                              _selectedEvents.value =
                                                   _getEventsForDay(
-                                                          _selectedDay!,
-                                                          journalData)
-                                                      .isNotEmpty) {
-                                                return kPrimaryColor;
-                                              } else {
-                                                return _selectedDayColor.value;
-                                              }
-                                            }(),
+                                                      localSelectedDay,
+                                                      moodData,
+                                                      journalData);
+                                            });
+                                          },
+                                          calendarStyle: CalendarStyle(
+                                            selectedDecoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: () {
+                                                if (_selectedDay != null &&
+                                                    _getEventsForDay(
+                                                            _selectedDay!,
+                                                            moodData,
+                                                            journalData)
+                                                        .isNotEmpty) {
+                                                  var color = getMoodDetails(
+                                                      _getEventsForDay(
+                                                                  _selectedDay!,
+                                                                  moodData,
+                                                                  journalData)
+                                                              .first['mood'] ??
+                                                          '')['color'];
+                                                  return color;
+                                                } else {
+                                                  return kPrimaryColor;
+                                                }
+                                              }(),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 20),
-                                      ValueListenableBuilder<
-                                          List<Map<String, dynamic>>>(
-                                        valueListenable: _selectedEvents,
-                                        builder: (context, value, _) {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemCount: value.length,
-                                            itemBuilder: (context, index) {
-                                              final event = value[index];
-                                              return ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                                child: Card(
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 4.0,
-                                                      horizontal: 8.0),
-                                                  color: Color(0xFFF5F5F5),
-                                                  child: ListTile(
-                                                    title: Text(
-                                                        event['entry'] ?? ''),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                        SizedBox(height: 20),
+                                        ValueListenableBuilder<
+                                            List<Map<String, dynamic>>>(
+                                          valueListenable: _selectedEvents,
+                                          builder: (context, value, _) {
+                                            return EventsList(events: value);
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
                               );

@@ -1,5 +1,7 @@
 import 'package:calmly_app/components/button.dart';
+import 'package:calmly_app/components/passwordField.dart';
 import 'package:calmly_app/components/smallButton.dart';
+import 'package:calmly_app/components/textField.dart';
 import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
 import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
@@ -23,6 +25,7 @@ class _profileBodyState extends State<profileBody> {
   String? userAge;
   String? userEmail;
   int? userMoodCount;
+  int? journalEntryCount;
   DateTime? accountCreationDate;
 
   TextEditingController _nameController = TextEditingController();
@@ -48,6 +51,7 @@ class _profileBodyState extends State<profileBody> {
         userAge = doc['age'];
         userEmail = doc['email'];
         userMoodCount = doc['moodCount'];
+        journalEntryCount = doc['journalCount'];
         accountCreationDate = doc['created_at'].toDate();
         _nameController.text = userName!;
         _ageController.text = userAge!;
@@ -90,6 +94,131 @@ class _profileBodyState extends State<profileBody> {
     }
   }
 
+  Future<bool> _verifyPassword(String password) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      EmailAuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      ) as EmailAuthCredential;
+      try {
+        await user.reauthenticateWithCredential(credential);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  Future<void> _deleteAccount() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .delete();
+      await user.delete();
+    }
+  }
+
+  void _showPasswordVerificationDialog(BuildContext context) {
+    TextEditingController passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          elevation: 16,
+          child: Container(
+            height: 400,
+            width: 550,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Account Deletion',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: kBlueColor,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'We are sorry to see you go!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Please enter your password to confirm deletion.',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  passwordField(
+                    controller: passwordController,
+                    onChanged: (value) {},
+                  ),
+                  SizedBox(height: 10),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      mainButton(
+                        buttonTitle: 'DELETE ACCOUNT',
+                        press: () async {
+                          String password = passwordController.text.trim();
+                          bool verified = await _verifyPassword(password);
+                          if (verified) {
+                            _deleteAccount();
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Account deleted successfully.'),
+                              ),
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Invalid password. Please try again.'),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(width: 5),
+                      mainButton(
+                        buttonTitle: 'CANCEL',
+                        press: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -97,7 +226,6 @@ class _profileBodyState extends State<profileBody> {
     return Scaffold(
       bottomNavigationBar: navBar(),
       body: Builder(
-        // Use Builder to get a new context for the SnackBar
         builder: (BuildContext scaffoldContext) {
           return SingleChildScrollView(
             child: Stack(
@@ -117,7 +245,7 @@ class _profileBodyState extends State<profileBody> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 30),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Stack(
                               children: [
                                 Container(
@@ -145,10 +273,8 @@ class _profileBodyState extends State<profileBody> {
                                     child: IconButton(
                                       icon: Icon(
                                         Icons.edit,
-                                        size:
-                                            28, // Adjust the icon size as needed
-                                        color:
-                                            kBlueColor, // Set the desired icon color
+                                        size: 28,
+                                        color: kBlueColor,
                                       ),
                                       onPressed: () {
                                         showDialog(
@@ -156,13 +282,13 @@ class _profileBodyState extends State<profileBody> {
                                           builder: (context) {
                                             return Dialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    25.0), // Sets the dialog's border radius
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
                                               ),
                                               elevation: 16,
                                               child: Container(
                                                 height: 400,
-                                                width: 580,
+                                                width: 550,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
                                                       16.0),
@@ -192,7 +318,7 @@ class _profileBodyState extends State<profileBody> {
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          15.0), // Sets the TextField's border radius
+                                                                          15.0),
                                                             ),
                                                           ),
                                                         ),
@@ -214,17 +340,17 @@ class _profileBodyState extends State<profileBody> {
                                                         ),
                                                         SizedBox(height: 16),
                                                         mainButton(
-                                                          buttonTitle: "cancel",
+                                                          buttonTitle: "SAVE",
                                                           press: () {
+                                                            updateUserData();
                                                             Navigator.pop(
                                                                 context);
                                                           },
                                                         ),
                                                         SizedBox(height: 5),
                                                         mainButton(
-                                                          buttonTitle: "save",
+                                                          buttonTitle: "CANCEL",
                                                           press: () {
-                                                            updateUserData();
                                                             Navigator.pop(
                                                                 context);
                                                           },
@@ -243,40 +369,56 @@ class _profileBodyState extends State<profileBody> {
                             ),
                           ),
                           if (userName != null)
-                            displayInfoCard("name", userName!),
-                          if (userAge != null) displayInfoCard("age", userAge!),
+                            displayInfoCard("name:", userName!),
+                          if (userAge != null)
+                            displayInfoCard("age:", userAge!),
                           if (userEmail != null)
-                            displayInfoCard("email", userEmail!),
+                            displayInfoCard("email:", userEmail!),
                           if (accountCreationDate != null)
                             displayInfoCard(
-                              "joined on",
+                              "joined on:",
                               DateFormat.yMMMMd('en_US')
                                   .format(accountCreationDate!),
                             ),
                           if (userMoodCount != null)
                             displayInfoCard(
-                                "moods tracked", userMoodCount.toString()),
+                                "moods tracked:", userMoodCount.toString()),
+                          if (journalEntryCount != null)
+                            displayInfoCard("journal entries:",
+                                journalEntryCount.toString()),
                           if (currentUser != null)
-                            mainButton(
-                              buttonTitle: "LOG OUT",
-                              press: () async {
-                                await FirebaseAuth.instance.signOut();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('logged out successfully.'),
-                                    behavior: SnackBarBehavior
-                                        .floating, // Set SnackBar behavior to floating
-                                  ),
-                                );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return HomePage();
-                                    },
-                                  ),
-                                );
-                              },
+                            Column(
+                              children: [
+                                mainButton(
+                                  buttonTitle: "LOG OUT",
+                                  press: () async {
+                                    await FirebaseAuth.instance.signOut();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text('Logged out successfully.'),
+                                      ),
+                                    );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return HomePage();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 5),
+                                mainButton(
+                                  buttonTitle: "DELETE ACCOUNT",
+                                  buttonColor: kPrimaryLightColor,
+                                  titleColor: Colors.black,
+                                  press: () {
+                                    _showPasswordVerificationDialog(context);
+                                  },
+                                ),
+                              ],
                             )
                           else
                             Column(

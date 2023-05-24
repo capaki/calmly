@@ -1,9 +1,6 @@
 import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class EventsList extends StatelessWidget {
   final List<Map<String, dynamic>> events;
@@ -53,27 +50,66 @@ class EventsList extends StatelessWidget {
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        final moodDetails = getMoodDetails(event['mood'] ?? '');
-        final moodColor = moodDetails['color'] as Color;
-        final moodIcon = moodDetails['icon'] as IconData;
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(30.0),
-          child: Card(
-            margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-            color: Color(0xFFF5F5F5),
-            child: ListTile(
-              title: Text(event['mood'] ?? ''),
-              subtitle: Text(event['reason'] ?? ''),
-              leading: CircleAvatar(
-                backgroundColor: moodColor,
-                child: Icon(
-                  moodIcon,
-                  color: Colors.white,
+        if (event.containsKey('mood')) {
+          final moodDetails = getMoodDetails(event['mood'] ?? '');
+          final moodColor = moodDetails['color'] as Color;
+          final moodIcon = moodDetails['icon'] as IconData;
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30.0),
+              child: Card(
+                color: Color(0xFFF5F5F5),
+                child: ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text('Mood: ${event['mood'] ?? ''}'),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(event['reason'] ?? ''),
+                  ),
+                  leading: CircleAvatar(
+                    backgroundColor: moodColor,
+                    child: Icon(
+                      moodIcon,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        } else if (event.containsKey('entry')) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30.0),
+              child: Card(
+                color: Color(0xFFF5F5F5),
+                child: ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text('Journal Entry:'),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(event['entry'] ?? ''),
+                  ),
+                  leading: CircleAvatar(
+                    backgroundColor: kPrimaryColor,
+                    child: Icon(
+                      Icons.book,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return SizedBox();
+        }
       },
     );
   }

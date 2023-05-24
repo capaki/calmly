@@ -35,6 +35,7 @@ class _signupBodyState extends State<signupBody> {
       'age': age,
       'created_at': DateTime.now(),
       'moodCount': 0,
+      'journalCount': 0,
     });
   }
 
