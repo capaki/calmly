@@ -1,18 +1,14 @@
 import 'dart:io';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/passwordField.dart';
-import 'package:calmly_app/components/smallButton.dart';
-import 'package:calmly_app/components/textField.dart';
 import 'package:calmly_app/main.dart';
 import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
 import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/components/navBar.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -36,7 +32,7 @@ class _profileBodyState extends State<profileBody> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserData();
     });
   }

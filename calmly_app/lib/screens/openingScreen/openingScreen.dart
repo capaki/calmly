@@ -1,6 +1,5 @@
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/main.dart';
-import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:flutter/material.dart';
 
 class openingScreen extends StatelessWidget {
@@ -10,8 +9,8 @@ class openingScreen extends StatelessWidget {
       body: GestureDetector(
         onTap: () {
           Navigator.push(
-            context, 
-            MaterialPageRoute(builder: (context){
+            context,
+            MaterialPageRoute(builder: (context) {
               return HomePage();
             }),
           );
@@ -32,23 +31,19 @@ class openingScreen extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: "calmly",
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium!
-                          .copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: kBlackColor,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: kBlackColor,
+                              ),
                     ),
                     TextSpan(
                       text: ".",
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium!
-                          .copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: kBlueColor,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: kBlueColor,
+                              ),
                     ),
                   ],
                 ),

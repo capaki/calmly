@@ -195,7 +195,7 @@ class _calendarScreenState extends State<calendarScreen> {
 
                                   if (moodData.isEmpty && journalData.isEmpty) {
                                     WidgetsBinding.instance
-                                        ?.addPostFrameCallback((_) {
+                                        .addPostFrameCallback((_) {
                                       ScaffoldMessenger.of(scaffoldContext)
                                           .showSnackBar(
                                         SnackBar(

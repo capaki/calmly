@@ -1,4 +1,3 @@
-import 'package:calmly_app/components/navBar.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:flutter/material.dart';
 

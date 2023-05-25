@@ -1,11 +1,9 @@
 import 'dart:math';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/navBar.dart';
-import 'package:calmly_app/components/smallButton.dart';
 import 'package:calmly_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 class journalScreen extends StatefulWidget {

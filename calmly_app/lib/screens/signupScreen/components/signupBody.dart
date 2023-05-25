@@ -1,17 +1,11 @@
 import 'package:calmly_app/components/accountCheck.dart';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/inputField.dart';
-import 'package:calmly_app/main.dart';
-import 'package:calmly_app/screens/signupScreen/components/orDivider.dart';
 import 'package:calmly_app/components/passwordField.dart';
 import 'package:calmly_app/screens/signupScreen/components/signupBackground.dart';
-import 'package:calmly_app/screens/signupScreen/components/socialMedia.dart';
 import 'package:calmly_app/components/textField.dart';
-import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/loginScreen/loginScreen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

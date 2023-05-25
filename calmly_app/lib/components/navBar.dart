@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:calmly_app/screens/profileScreen/profileScreen.dart';
 
-
 class navBar extends StatelessWidget {
   const navBar({
     super.key,
@@ -13,9 +12,8 @@ class navBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 45, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 10),
       height: 70,
       color: Colors.white,
       child: Row(
@@ -26,8 +24,8 @@ class navBar extends StatelessWidget {
             svgSource: "assets/icons/calendar-days.svg",
             press: () {
               Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(builder: (context){
+                context,
+                MaterialPageRoute(builder: (context) {
                   return calendarScreen();
                 }),
               );
@@ -38,8 +36,8 @@ class navBar extends StatelessWidget {
             svgSource: "assets/icons/home.svg",
             press: () {
               Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(builder: (context){
+                context,
+                MaterialPageRoute(builder: (context) {
                   return HomePage();
                 }),
               );
@@ -51,8 +49,8 @@ class navBar extends StatelessWidget {
             svgSource: "assets/icons/profile.svg",
             press: () {
               Navigator.pushReplacement(
-                context, 
-                MaterialPageRoute(builder: (context){
+                context,
+                MaterialPageRoute(builder: (context) {
                   return profileScreen();
                 }),
               );

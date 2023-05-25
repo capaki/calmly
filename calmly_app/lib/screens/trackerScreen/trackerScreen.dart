@@ -1,7 +1,5 @@
 import 'package:calmly_app/components/navBar.dart';
-import 'package:calmly_app/components/searchBar.dart';
 import 'package:calmly_app/components/button.dart';
-import 'package:calmly_app/components/smallButton.dart';
 import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/main.dart';
 import 'package:flutter/material.dart';

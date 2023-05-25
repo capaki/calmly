@@ -7,7 +7,6 @@ import 'package:calmly_app/components/passwordField.dart';
 import 'package:calmly_app/components/textField.dart';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/screens/forgotPasswordScreen/forgotPasswordScreen.dart';
-import 'package:calmly_app/constants.dart';
 import 'package:calmly_app/screens/signupScreen/signupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
