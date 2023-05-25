@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/passwordField.dart';
 import 'package:calmly_app/components/smallButton.dart';
@@ -27,6 +28,7 @@ class _profileBodyState extends State<profileBody> {
   int? userMoodCount;
   int? journalEntryCount;
   DateTime? accountCreationDate;
+  String? imageUrl;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
@@ -55,6 +57,7 @@ class _profileBodyState extends State<profileBody> {
         accountCreationDate = doc['created_at'].toDate();
         _nameController.text = userName!;
         _ageController.text = userAge!;
+        imageUrl = doc['imageUrl'];
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -219,6 +222,27 @@ class _profileBodyState extends State<profileBody> {
     );
   }
 
+  Future<void> updateUserImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      File imageFile = File(pickedFile.path);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'imageUrl': imageFile.path});
+
+        setState(() {
+          // Update the imageUrl variable in the state
+          imageUrl = imageFile.path;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -257,11 +281,16 @@ class _profileBodyState extends State<profileBody> {
                                       color: Colors.white,
                                       width: 4,
                                     ),
-                                    image: DecorationImage(
-                                      fit: BoxFit.fitWidth,
-                                      image:
-                                          AssetImage("assets/images/pic2.png"),
-                                    ),
+                                    image: imageUrl != null
+                                        ? DecorationImage(
+                                            fit: BoxFit.fitWidth,
+                                            image: FileImage(File(imageUrl!)),
+                                          )
+                                        : DecorationImage(
+                                            fit: BoxFit.fitWidth,
+                                            image: AssetImage(
+                                                "assets/images/pic2.png"),
+                                          ),
                                   ),
                                 ),
                                 Positioned(
@@ -277,90 +306,7 @@ class _profileBodyState extends State<profileBody> {
                                         color: kBlueColor,
                                       ),
                                       onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                              ),
-                                              elevation: 16,
-                                              child: Container(
-                                                height: 400,
-                                                width: 550,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          'Edit Profile',
-                                                          style: TextStyle(
-                                                            fontSize: 24,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: kBlueColor,
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 24),
-                                                        TextField(
-                                                          controller:
-                                                              _nameController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            labelText: 'Name',
-                                                            border:
-                                                                OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15.0),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 16),
-                                                        TextField(
-                                                          controller:
-                                                              _ageController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            labelText: 'Age',
-                                                            border:
-                                                                OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15.0), // Sets the TextField's border radius
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 16),
-                                                        mainButton(
-                                                          buttonTitle: "SAVE",
-                                                          press: () {
-                                                            updateUserData();
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                        SizedBox(height: 5),
-                                                        mainButton(
-                                                          buttonTitle: "CANCEL",
-                                                          press: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                      ]),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
+                                        updateUserImage();
                                       },
                                     ),
                                   ),
@@ -389,6 +335,94 @@ class _profileBodyState extends State<profileBody> {
                           if (currentUser != null)
                             Column(
                               children: [
+                                mainButton(
+                                  buttonTitle: "EDIT DETAILS",
+                                  buttonColor: kPrimaryLightColor,
+                                  titleColor: Colors.black,
+                                  press: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Dialog(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
+                                          elevation: 16,
+                                          child: Container(
+                                            height: 400,
+                                            width: 550,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      'Edit Profile',
+                                                      style: TextStyle(
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: kBlueColor,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 24),
+                                                    TextField(
+                                                      controller:
+                                                          _nameController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        labelText: 'Name',
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    TextField(
+                                                      controller:
+                                                          _ageController,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        labelText: 'Age',
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  15.0), // Sets the TextField's border radius
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    mainButton(
+                                                      buttonTitle: "SAVE",
+                                                      press: () {
+                                                        updateUserData();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    SizedBox(height: 5),
+                                                    mainButton(
+                                                      buttonTitle: "CANCEL",
+                                                      press: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 5),
                                 mainButton(
                                   buttonTitle: "LOG OUT",
                                   press: () async {
