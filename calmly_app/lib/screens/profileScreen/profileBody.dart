@@ -285,7 +285,7 @@ class _profileBodyState extends State<profileBody> {
                                         : DecorationImage(
                                             fit: BoxFit.fitWidth,
                                             image: AssetImage(
-                                                "assets/images/pic2.png"),
+                                                "assets/images/anonymous.jpg"),
                                           ),
                                   ),
                                 ),
