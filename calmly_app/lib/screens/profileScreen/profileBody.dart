@@ -125,7 +125,7 @@ class _profileBodyState extends State<profileBody> {
           ),
           elevation: 16,
           child: Container(
-            height: 400,
+            height: 420,
             width: 550,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -339,7 +339,7 @@ class _profileBodyState extends State<profileBody> {
                                           ),
                                           elevation: 16,
                                           child: Container(
-                                            height: 400,
+                                            height: 420,
                                             width: 550,
                                             child: Padding(
                                               padding:

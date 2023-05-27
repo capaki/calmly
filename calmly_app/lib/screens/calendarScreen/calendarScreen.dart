@@ -22,8 +22,23 @@ class _calendarScreenState extends State<calendarScreen> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay, {}, {}));
+    _selectedEvents = ValueNotifier([]);
     _selectedDayColor = ValueNotifier(kPrimaryColor);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _fetchTodayEntries();
+    });
+  }
+
+  Future<void> _fetchTodayEntries() async {
+    DateTime today = DateTime.now();
+    Map<DateTime, List<Map<String, dynamic>>> moodData = await fetchMoodData();
+    Map<DateTime, List<Map<String, dynamic>>> journalData =
+        await fetchJournalData();
+
+    DateTime selectedDay = DateTime(today.year, today.month, today.day);
+    _selectedDay = selectedDay;
+    _selectedEvents.value =
+        _getEventsForDay(selectedDay, moodData, journalData);
   }
 
   @override

@@ -150,13 +150,13 @@ class _journalScreenState extends State<journalScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                     SizedBox(
                       width: size.width * 0.6,
                       child: Text(
                         _prompt,
                         style: TextStyle(
-                          fontSize: 23,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF696969),
                         ),
