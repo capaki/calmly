@@ -30,6 +30,7 @@ class _signupBodyState extends State<signupBody> {
       'created_at': DateTime.now(),
       'moodCount': 0,
       'journalCount': 0,
+      'imageUrl': "",
     });
   }
 
@@ -89,11 +90,23 @@ class _signupBodyState extends State<signupBody> {
             mainButton(
               buttonTitle: "SIGN UP",
               press: () async {
+                if (_nameController.text.isEmpty ||
+                    _ageController.text.isEmpty ||
+                    _emailController.text.isEmpty ||
+                    _passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please fill in all fields to sign up.'),
+                    ),
+                  );
+                  return;
+                }
                 if (int.parse(_ageController.text) < 16) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            'You must be at least 16 years old to create an account.')),
+                      content: Text(
+                          'You must be at least 16 years old to create an account.'),
+                    ),
                   );
                   return;
                 }
@@ -117,8 +130,9 @@ class _signupBodyState extends State<signupBody> {
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            'Account created successfully. Please log in.')),
+                      content:
+                          Text('Account created successfully. Please log in.'),
+                    ),
                   );
                 } on FirebaseAuthException catch (e) {
                   String errorMessage;

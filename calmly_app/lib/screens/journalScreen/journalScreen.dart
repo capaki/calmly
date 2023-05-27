@@ -61,6 +61,12 @@ class _journalScreenState extends State<journalScreen> {
           content: Text('Journal entry saved successfully.'),
         ),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please log in to save your journal entry.'),
+        ),
+      );
     }
   }
 

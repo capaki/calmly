@@ -55,14 +55,6 @@ class _profileBodyState extends State<profileBody> {
         _ageController.text = userAge!;
         imageUrl = doc['imageUrl'];
       });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please login to see your information.'),
-          behavior:
-              SnackBarBehavior.floating, // Set SnackBar behavior to floating
-        ),
-      );
     }
   }
 
@@ -219,20 +211,20 @@ class _profileBodyState extends State<profileBody> {
   }
 
   Future<void> updateUserImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final picker = ImagePicker();
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .update({'imageUrl': imageFile.path});
 
         setState(() {
-          // Update the imageUrl variable in the state
           imageUrl = imageFile.path;
         });
       }
@@ -277,7 +269,8 @@ class _profileBodyState extends State<profileBody> {
                                       color: Colors.white,
                                       width: 4,
                                     ),
-                                    image: imageUrl != null
+                                    image: imageUrl != null &&
+                                            imageUrl!.isNotEmpty
                                         ? DecorationImage(
                                             fit: BoxFit.fitWidth,
                                             image: FileImage(File(imageUrl!)),

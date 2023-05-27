@@ -39,7 +39,7 @@ class _trackerScreenState extends State<trackerScreen> {
     try {
       if (FirebaseAuth.instance.currentUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('please login to track your mood.')),
+          SnackBar(content: Text('Please log in to track your mood.')),
         );
         return;
       }
