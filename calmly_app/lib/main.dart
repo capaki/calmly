@@ -6,8 +6,8 @@ import 'package:calmly_app/screens/infoScreen/infoScreen.dart';
 import 'package:calmly_app/screens/meditationScreen/meditationScreen.dart';
 import 'package:calmly_app/screens/openingScreen/openingScreen.dart';
 import 'package:calmly_app/screens/trackerScreen/trackerScreen.dart';
-import 'package:calmly_app/screens/welcomeScreen/welcomeScreen.dart';
 import 'package:calmly_app/screens/journalScreen/journalScreen.dart';
+import 'package:calmly_app/screens/profileScreen/profileScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return welcomeScreen();
+                            return profileScreen();
                           }),
                         );
                       },
