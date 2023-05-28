@@ -19,7 +19,6 @@ class infoArticle extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(13),
       child: Container(
-        //padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(13),
@@ -39,19 +38,6 @@ class infoArticle extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 26),
               child: Row(
                 children: <Widget>[
-                  /*Container(
-                    height: 42,
-                    width: 43,
-                    decoration: BoxDecoration(
-                      color: isCompleted ? Colors.white : kActiveIconColor,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: kActiveIconColor),
-                    ),
-                    child: Icon(
-                      Icons.book, 
-                      color: isCompleted ? kActiveIconColor : Colors.white,
-                    ),
-                  ),*/
                   SizedBox(
                     width: 15,
                   ),

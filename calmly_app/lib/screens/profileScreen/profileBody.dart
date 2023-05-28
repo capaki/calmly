@@ -66,12 +66,10 @@ class _profileBodyState extends State<profileBody> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('You must be at least 16 years old.'),
-            behavior:
-                SnackBarBehavior.floating, // Set SnackBar behavior to floating
+            behavior: SnackBarBehavior.floating,
           ),
         );
-        _ageController.text =
-            userAge!; // Reset the age controller to the current age
+        _ageController.text = userAge!;
         return;
       }
       await FirebaseFirestore.instance
@@ -81,7 +79,7 @@ class _profileBodyState extends State<profileBody> {
         'name': _nameController.text,
         'age': _ageController.text,
       });
-      getUserData(); // Refresh the user data
+      getUserData();
     }
   }
 

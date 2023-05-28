@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+
 import 'package:calmly_app/components/inputField.dart';
 import 'package:calmly_app/screens/forgotPasswordScreen/components/forgotPasswordBackground.dart';
 import 'package:calmly_app/components/textField.dart';
