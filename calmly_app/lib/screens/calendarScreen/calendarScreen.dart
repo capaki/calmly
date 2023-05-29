@@ -211,13 +211,18 @@ class _calendarScreenState extends State<calendarScreen> {
                                   if (moodData.isEmpty && journalData.isEmpty) {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      ScaffoldMessenger.of(scaffoldContext)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Please log in to access your data.'),
-                                        ),
-                                      );
+                                      User? currentUser =
+                                          FirebaseAuth.instance.currentUser;
+                                      if (currentUser == null) {
+                                        ScaffoldMessenger.of(scaffoldContext)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Please log in to access your data.',
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     });
                                   }
 

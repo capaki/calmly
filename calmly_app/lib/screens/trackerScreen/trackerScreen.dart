@@ -37,6 +37,12 @@ class _trackerScreenState extends State<trackerScreen> {
 
   void _saveMoodTrackerData() async {
     try {
+      if (_selectedMood.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please select a mood.')),
+        );
+        return;
+      }
       if (FirebaseAuth.instance.currentUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please log in to track your mood.')),
@@ -59,7 +65,7 @@ class _trackerScreenState extends State<trackerScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('you have already tracked your mood for today.')),
+              content: Text('You have already tracked your mood for today.')),
         );
         return;
       }
@@ -90,7 +96,7 @@ class _trackerScreenState extends State<trackerScreen> {
         MaterialPageRoute(builder: (context) => HomePage()),
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('mood saved successfully.')),
+        SnackBar(content: Text('Mood saved successfully.')),
       );
 
       print('Mood tracker data saved successfully!');

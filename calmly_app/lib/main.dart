@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return profileScreen();
+                            return HomePage();
                           }),
                         );
                       },

@@ -152,12 +152,12 @@ class _profileBodyState extends State<profileBody> {
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 4),
                   passwordField(
                     controller: passwordController,
                     onChanged: (value) {},
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 4),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -355,7 +355,7 @@ class _profileBodyState extends State<profileBody> {
                                                         color: kBlueColor,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 24),
+                                                    SizedBox(height: 20),
                                                     TextField(
                                                       controller:
                                                           _nameController,
@@ -371,7 +371,7 @@ class _profileBodyState extends State<profileBody> {
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 16),
+                                                    SizedBox(height: 10),
                                                     TextField(
                                                       controller:
                                                           _ageController,
@@ -386,7 +386,7 @@ class _profileBodyState extends State<profileBody> {
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 16),
+                                                    SizedBox(height: 10),
                                                     mainButton(
                                                       buttonTitle: "SAVE",
                                                       press: () {
@@ -394,7 +394,7 @@ class _profileBodyState extends State<profileBody> {
                                                         Navigator.pop(context);
                                                       },
                                                     ),
-                                                    SizedBox(height: 5),
+                                                    SizedBox(height: 3),
                                                     mainButton(
                                                       buttonTitle: "CANCEL",
                                                       press: () {

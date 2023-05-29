@@ -7,8 +7,8 @@ import 'package:calmly_app/screens/profileScreen/profileScreen.dart';
 
 class navBar extends StatelessWidget {
   const navBar({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,44 +17,50 @@ class navBar extends StatelessWidget {
       height: 70,
       color: Colors.white,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, //spaceBetween
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          navBarItem(
-            navTitle: "calendar",
-            svgSource: "assets/icons/calendar-days.svg",
-            press: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return calendarScreen();
-                }),
-              );
-            },
+          Expanded(
+            child: navBarItem(
+              navTitle: "calendar",
+              svgSource: "assets/icons/calendar-days.svg",
+              press: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return calendarScreen();
+                  }),
+                );
+              },
+            ),
           ),
-          navBarItem(
-            navTitle: "home",
-            svgSource: "assets/icons/home.svg",
-            press: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return HomePage();
-                }),
-              );
-            },
-            isActive: true,
+          Expanded(
+            child: navBarItem(
+              navTitle: "home",
+              svgSource: "assets/icons/home.svg",
+              press: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return HomePage();
+                  }),
+                );
+              },
+              isActive: true,
+            ),
           ),
-          navBarItem(
-            navTitle: "profile",
-            svgSource: "assets/icons/profile.svg",
-            press: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return profileScreen();
-                }),
-              );
-            },
+          Expanded(
+            child: navBarItem(
+              navTitle: "profile",
+              svgSource: "assets/icons/profile.svg",
+              press: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return profileScreen();
+                  }),
+                );
+              },
+            ),
           ),
         ],
       ),

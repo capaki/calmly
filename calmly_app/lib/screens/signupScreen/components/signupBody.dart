@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
-
 import 'package:calmly_app/components/accountCheck.dart';
 import 'package:calmly_app/components/button.dart';
 import 'package:calmly_app/components/inputField.dart';
